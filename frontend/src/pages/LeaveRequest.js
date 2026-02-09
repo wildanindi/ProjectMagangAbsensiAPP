@@ -128,12 +128,12 @@ const LeaveRequest = () => {
         <div className="leave-container">
             <h1>Pengajuan Izin</h1>
 
-            <div className="leave-info-section">
+            {/* <div className="leave-info-section">
                 <div className="info-card">
                     <div className="info-label">Sisa Izin Anda</div>
                     <div className="info-value">{user?.sisa_izin || 0} Hari</div>
                 </div>
-            </div>
+            </div> */}
 
             <div className="leave-form-section">
                 <h2>Formulir Pengajuan Izin</h2>

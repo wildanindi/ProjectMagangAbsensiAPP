@@ -24,7 +24,7 @@ const Sidebar = () => {
 
     const adminMenu = [
         { path: '/admin/dashboard', label: 'Dashboard Admin', icon: LayoutDashboard },
-        { path: '/admin/employees', label: 'Data Karyawan', icon: Users },
+        { path: '/admin/employees', label: 'Data Anak Magang', icon: Users },
         { path: '/admin/supervisors', label: 'Data Pembimbing', icon: UserCheck },
         { path: '/admin/leave-approvals', label: 'Persetujuan Izin', icon: FileText }
     ];

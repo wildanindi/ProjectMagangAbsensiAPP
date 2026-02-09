@@ -248,10 +248,10 @@ const Profile = () => {
                                     <span className="value">{user.periode_id}</span>
                                 </div>
                             )}
-                            <div className="detail-row">
+                            {/* <div className="detail-row">
                                 <span className="label">Sisa Izin/Cuti</span>
                                 <span className="value badge-info">{user?.sisa_izin || 0} hari</span>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 )}
