@@ -2,17 +2,27 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { usersAPI } from '../api/users';
 import Swal from 'sweetalert2';
-import { Edit2 } from 'lucide-react';
+import { Edit2, Key, X } from 'lucide-react';
 import './Profile.css';
 
 const Profile = () => {
     const { user } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
     const [loading, setLoading] = useState(false);
+    
+    // Profile form state
     const [formData, setFormData] = useState({
         nama: user?.nama || '',
         email: user?.email || '',
         telepon: user?.telepon || ''
+    });
+
+    // Password form state
+    const [passwordData, setPasswordData] = useState({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
     });
 
     const handleChange = (e) => {
@@ -21,6 +31,72 @@ const Profile = () => {
             ...prev,
             [name]: value
         }));
+    };
+
+    const handlePasswordChange = (e) => {
+        const { name, value } = e.target;
+        setPasswordData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const validatePassword = () => {
+        // Validasi password kosong
+        if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
+            Swal.fire('Error', 'Semua field password harus diisi', 'error');
+            return false;
+        }
+
+        // Validasi panjang password
+        if (passwordData.newPassword.length < 6) {
+            Swal.fire('Error', 'Password baru minimal 6 karakter', 'error');
+            return false;
+        }
+
+        // Validasi password baru sama dengan saat ini
+        if (passwordData.newPassword === passwordData.currentPassword) {
+            Swal.fire('Error', 'Password baru tidak boleh sama dengan password lama', 'error');
+            return false;
+        }
+
+        // Validasi konfirmasi password
+        if (passwordData.newPassword !== passwordData.confirmPassword) {
+            Swal.fire('Error', 'Password baru dan konfirmasi tidak cocok', 'error');
+            return false;
+        }
+
+        return true;
+    };
+
+    const handlePasswordSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!validatePassword()) {
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const response = await usersAPI.changePassword(user.id, {
+                currentPassword: passwordData.currentPassword,
+                newPassword: passwordData.newPassword
+            });
+
+            if (response.success) {
+                Swal.fire('Sukses', 'Password berhasil diubah. Silakan login kembali.', 'success');
+                setShowPasswordModal(false);
+                setPasswordData({
+                    currentPassword: '',
+                    newPassword: '',
+                    confirmPassword: ''
+                });
+            }
+        } catch (error) {
+            Swal.fire('Error', error.response?.data?.message || 'Gagal mengubah password', 'error');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -49,17 +125,28 @@ const Profile = () => {
                 </div>
                 <div className="profile-info">
                     <h1>{user?.nama}</h1>
-                    <p>{user?.role === 'ADMIN' ? 'Administrator' : 'Employee'}</p>
+                    <p>{user?.role === 'ADMIN' ? 'Administrator' : 'Anak Magang'}</p>
                 </div>
-                {!isEditing && (
-                    <button 
-                        className="edit-btn"
-                        onClick={() => setIsEditing(true)}
-                    >
-                        <Edit2 size={18} />
-                        <span>Edit Profil</span>
-                    </button>
-                )}
+                <div className="profile-header-buttons">
+                    {!isEditing && (
+                        <>
+                            <button 
+                                className="edit-btn"
+                                onClick={() => setIsEditing(true)}
+                            >
+                                <Edit2 size={18} />
+                                <span>Edit Profil</span>
+                            </button>
+                            <button 
+                                className="change-password-btn"
+                                onClick={() => setShowPasswordModal(true)}
+                            >
+                                <Key size={18} />
+                                <span>Ubah Password</span>
+                            </button>
+                        </>
+                    )}
+                </div>
             </div>
 
             <div className="profile-content">
@@ -169,6 +256,82 @@ const Profile = () => {
                     </div>
                 )}
             </div>
+
+            {/* Password Change Modal */}
+            {showPasswordModal && (
+                <div className="modal-overlay" onClick={() => setShowPasswordModal(false)}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2>Ubah Password</h2>
+                            <button
+                                className="modal-close"
+                                onClick={() => setShowPasswordModal(false)}
+                            >
+                                <X size={24} />
+                            </button>
+                        </div>
+
+                        <form onSubmit={handlePasswordSubmit} className="password-form">
+                            <div className="form-group">
+                                <label htmlFor="currentPassword">Password Saat Ini</label>
+                                <input
+                                    type="password"
+                                    id="currentPassword"
+                                    name="currentPassword"
+                                    value={passwordData.currentPassword}
+                                    onChange={handlePasswordChange}
+                                    placeholder="Masukkan password lama Anda"
+                                    disabled={loading}
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="newPassword">Password Baru</label>
+                                <input
+                                    type="password"
+                                    id="newPassword"
+                                    name="newPassword"
+                                    value={passwordData.newPassword}
+                                    onChange={handlePasswordChange}
+                                    placeholder="Masukkan password baru (min 6 karakter)"
+                                    disabled={loading}
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="confirmPassword">Konfirmasi Password Baru</label>
+                                <input
+                                    type="password"
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    value={passwordData.confirmPassword}
+                                    onChange={handlePasswordChange}
+                                    placeholder="Ulangi password baru Anda"
+                                    disabled={loading}
+                                />
+                            </div>
+
+                            <div className="modal-actions">
+                                <button
+                                    type="button"
+                                    className="btn-modal-cancel"
+                                    onClick={() => setShowPasswordModal(false)}
+                                    disabled={loading}
+                                >
+                                    Batal
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="btn-modal-submit"
+                                    disabled={loading}
+                                >
+                                    {loading ? 'Mengubah...' : 'Ubah Password'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

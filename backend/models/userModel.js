@@ -42,6 +42,7 @@ const getUserById = async (id) => {
                         u.nama, 
                         u.email, 
                         u.username, 
+                        u.password,
                         u.role, 
                         u.pembimbing_id,
                         u.periode_id,

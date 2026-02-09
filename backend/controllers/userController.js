@@ -1,4 +1,5 @@
 const userModel = require('../models/userModel');
+const bcrypt = require('bcryptjs');
 
 // Get all users (Admin)
 const getAllUsers = async (req, res) => {
@@ -281,6 +282,80 @@ const updateUserLeaveBalance = async (req, res) => {
     }
 };
 
+// Change user password (User dapat mengubah password mereka sendiri)
+const changeUserPassword = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { currentPassword, newPassword } = req.body;
+        const userId = req.user.id; // Dari JWT token
+
+        // Validate
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({
+                success: false,
+                message: 'Password saat ini dan password baru harus diisi'
+            });
+        }
+
+        // Validate new password length
+        if (newPassword.length < 6) {
+            return res.status(400).json({
+                success: false,
+                message: 'Password baru minimal 6 karakter'
+            });
+        }
+
+        // Only allow user to change their own password
+        if (parseInt(id) !== userId && req.user.role !== 'ADMIN') {
+            return res.status(403).json({
+                success: false,
+                message: 'Anda tidak memiliki akses untuk mengubah password pengguna lain'
+            });
+        }
+
+        // Check if user exists
+        const user = await userModel.getUserById(id);
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User tidak ditemukan'
+            });
+        }
+
+        // Verify current password
+        const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({
+                success: false,
+                message: 'Password saat ini tidak sesuai'
+            });
+        }
+
+        // Check if new password is same as old password
+        const isNewPasswordSame = await bcrypt.compare(newPassword, user.password);
+        if (isNewPasswordSame) {
+            return res.status(400).json({
+                success: false,
+                message: 'Password baru tidak boleh sama dengan password lama'
+            });
+        }
+
+        // Update password (model will hash it)
+        await userModel.updateUserPassword(id, newPassword);
+
+        return res.status(200).json({
+            success: true,
+            message: 'Password berhasil diubah. Silakan login ulang dengan password baru.'
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
 module.exports = {
     getAllUsers,
     getAllInterns,
@@ -289,5 +364,6 @@ module.exports = {
     updateUserData,
     deleteUserData,
     resetUserPassword,
-    updateUserLeaveBalance
+    updateUserLeaveBalance,
+    changeUserPassword
 };

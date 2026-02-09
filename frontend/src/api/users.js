@@ -41,5 +41,10 @@ export const usersAPI = {
     updateLeaveBalance: async (id, leaveBalance) => {
         const response = await apiClient.put(`/users/${id}/leave-balance`, { sisa_izin: leaveBalance });
         return response.data;
+    },
+
+    changePassword: async (id, passwordData) => {
+        const response = await apiClient.put(`/users/${id}/change-password`, passwordData);
+        return response.data;
     }
 };
