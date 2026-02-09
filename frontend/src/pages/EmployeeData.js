@@ -223,7 +223,7 @@ const EmployeeData = () => {
                                     <td>{emp.nim || '-'}</td>
                                     <td>{emp.username}</td>
                                     <td>{emp.email || '-'}</td>
-                                    <td>{emp.pembimbing_id ? `ID: ${emp.pembimbing_id}` : '-'}</td>
+                                    <td>{emp.nama ? `${emp.nama}` : '-'}</td>
                                     <td>
                                         <div className="actions">
                                             <button 
