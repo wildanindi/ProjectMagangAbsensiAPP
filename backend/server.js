@@ -6,7 +6,7 @@ require('dotenv').config();
 const db = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
 
-// Routes
+// Routess
 const authRoutes = require('./routes/authRoutes');
 const absensiRoutes = require('./routes/absensiRoutes');
 const izinRoutes = require('./routes/izinRoutes');
