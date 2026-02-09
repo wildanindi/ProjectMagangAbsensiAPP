@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { absensiAPI } from '../api/absensi';
-import { MapPin, Clock } from 'lucide-react';
+import { izinAPI } from '../api/izin';
+import { MapPin, Clock, Calendar, AlertCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 
 const Dashboard = () => {
     const { user } = useAuth();
+    const navigate = useNavigate();
     const [currentTime, setCurrentTime] = useState(new Date());
     const [attendanceSummary, setAttendanceSummary] = useState(null);
+    const [leaveSummary, setLeaveSummary] = useState(null);
+    const [leaveBalance, setLeaveBalance] = useState(0);
     const [recentActivities, setRecentActivities] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -23,11 +28,26 @@ const Dashboard = () => {
         const fetchData = async () => {
             try {
                 if (user?.id) {
-                    const summaryResponse = await absensiAPI.getAttendanceSummary(user.id);
+                    // Fetch attendance summary
+                    const summaryResponse = await absensiAPI.getAttendanceStats();
                     setAttendanceSummary(summaryResponse.data);
 
-                    const historyResponse = await absensiAPI.getUserAttendanceHistory(user.id, 5, 0);
+                    // Fetch recent activities
+                    const historyResponse = await absensiAPI.getUserAttendanceHistory(5, 0);
                     setRecentActivities(historyResponse.data || []);
+
+                    // Fetch leave summary
+                    try {
+                        const leaveSummaryResponse = await izinAPI.getUserLeaveSummary();
+                        setLeaveSummary(leaveSummaryResponse.data);
+                    } catch (error) {
+                        console.error('Error fetching leave summary:', error);
+                    }
+
+                    // Get leave balance from user (if available)
+                    if (user?.sisa_izin) {
+                        setLeaveBalance(user.sisa_izin);
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -74,6 +94,23 @@ const Dashboard = () => {
                     <div>
                         <div className="location-label">Lokasi</div>
                         <div className="location-value">Kantor Pusat, Jakarta</div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Leave Balance Card */}
+            <div className="leave-balance-card">
+                <div className="leave-balance-header">
+                    <Calendar size={24} />
+                    <h3>Sisa Jatah Izin/Cuti</h3>
+                </div>
+                <div className="leave-balance-content">
+                    <div className="leave-balance-number">{leaveBalance}</div>
+                    <div className="leave-balance-subtitle">Hari Tersisa Tahun Ini</div>
+                    <div className="leave-balance-actions">
+                        <button className="btn-view-leave" onClick={() => navigate('/leave-request')}>
+                            Lihat Detail
+                        </button>
                     </div>
                 </div>
             </div>

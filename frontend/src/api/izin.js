@@ -6,32 +6,48 @@ export const izinAPI = {
         return response.data;
     },
 
-    getUserLeaveRequests: async (userId, status = null) => {
-        const response = await apiClient.get(`/izin/user/${userId}`, {
+    getUserLeaveRequests: async (status = null) => {
+        const response = await apiClient.get('/izin/my-requests', {
             params: status ? { status } : {}
         });
         return response.data;
     },
 
+    getUserLeaveSummary: async () => {
+        const response = await apiClient.get('/izin/summary');
+        return response.data;
+    },
+
+    deleteLeaveRequest: async (id) => {
+        const response = await apiClient.delete(`/izin/${id}`);
+        return response.data;
+    },
+
+    // Admin endpoints
     getAllLeaveRequests: async (status = null) => {
-        const response = await apiClient.get('/izin/all', {
+        const response = await apiClient.get('/izin/admin/all', {
             params: status ? { status } : {}
         });
+        return response.data;
+    },
+
+    getLeaveRequestDetail: async (id) => {
+        const response = await apiClient.get(`/izin/admin/${id}`);
         return response.data;
     },
 
     approveLeaveRequest: async (id) => {
-        const response = await apiClient.put(`/izin/${id}/approve`);
+        const response = await apiClient.put(`/izin/admin/${id}/approve`);
         return response.data;
     },
 
     rejectLeaveRequest: async (id) => {
-        const response = await apiClient.put(`/izin/${id}/reject`);
+        const response = await apiClient.put(`/izin/admin/${id}/reject`);
         return response.data;
     },
 
-    getLeaveRequestById: async (id) => {
-        const response = await apiClient.get(`/izin/${id}`);
+    getPendingLeaveCount: async () => {
+        const response = await apiClient.get('/izin/admin/pending/count');
         return response.data;
     }
 };

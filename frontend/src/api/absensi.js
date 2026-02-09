@@ -8,34 +8,50 @@ export const absensiAPI = {
         return response.data;
     },
 
-    getTodayAttendance: async (userId) => {
-        const response = await apiClient.get(`/absensi/today/${userId}`);
+    getTodayAttendance: async () => {
+        const response = await apiClient.get('/absensi/today');
         return response.data;
     },
 
-    getUserAttendanceHistory: async (userId, limit = 50, offset = 0) => {
-        const response = await apiClient.get(`/absensi/user/${userId}`, {
+    getUserAttendanceHistory: async (limit = 50, offset = 0) => {
+        const response = await apiClient.get('/absensi/history', {
             params: { limit, offset }
         });
         return response.data;
     },
 
-    getAttendanceByDateRange: async (userId, startDate, endDate) => {
-        const response = await apiClient.get(`/absensi/user/${userId}/date-range`, {
+    getAttendanceByDateRange: async (startDate, endDate) => {
+        const response = await apiClient.get('/absensi/date-range', {
             params: { startDate, endDate }
         });
         return response.data;
     },
 
-    getAttendanceSummary: async (userId) => {
-        const response = await apiClient.get(`/absensi/summary/${userId}`);
+    getAttendanceStats: async () => {
+        const response = await apiClient.get('/absensi/stats');
         return response.data;
     },
 
+    // Admin endpoints
     getAllAttendance: async (limit = 100, offset = 0) => {
-        const response = await apiClient.get('/absensi/all', {
+        const response = await apiClient.get('/absensi/admin/all', {
             params: { limit, offset }
         });
+        return response.data;
+    },
+
+    getAttendanceSummaryToday: async () => {
+        const response = await apiClient.get('/absensi/admin/summary-today');
+        return response.data;
+    },
+
+    getUsersWithTodayAttendance: async () => {
+        const response = await apiClient.get('/absensi/admin/users-today');
+        return response.data;
+    },
+
+    getUserAttendanceDetail: async (userId) => {
+        const response = await apiClient.get(`/absensi/admin/user/${userId}`);
         return response.data;
     }
 };

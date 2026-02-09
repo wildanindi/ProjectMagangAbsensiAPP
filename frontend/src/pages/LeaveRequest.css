@@ -159,9 +159,144 @@
     border: 1px solid #e0e0e0;
 }
 
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.history-header h2 {
+    margin: 0;
+}
+
+.history-filters {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.filter-label {
+    font-size: 13px;
+    color: #666;
+    font-weight: 500;
+}
+
+.leave-table-wrapper {
+    overflow-x: auto;
+}
+
+.leave-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leave-table thead {
+    background: #f9f9f9;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.leave-table th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #666;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.leave-table td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+    font-size: 14px;
+}
+
+.leave-table tbody tr:hover {
+    background: #f9f9f9;
+}
+
+.type-cell {
+    font-weight: 600;
+    color: #3b82f6;
+}
+
+.duration-cell {
+    font-weight: 600;
+    color: #10b981;
+}
+
+.note-cell {
+    color: #666;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    width: fit-content;
+}
+
+.badge-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.badge-approved {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.badge-rejected {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
 .no-history {
+    text-align: center;
+    padding: 60px 40px;
+    color: #999;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.loading {
     text-align: center;
     padding: 40px;
     color: #999;
     font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .leave-table {
+        font-size: 12px;
+    }
+
+    .leave-table th,
+    .leave-table td {
+        padding: 10px 6px;
+    }
+
+    .note-cell {
+        max-width: 100px;
+    }
+
+    .history-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
 }

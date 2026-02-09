@@ -13,6 +13,7 @@ const izinRoutes = require('./routes/izinRoutes');
 const userRoutes = require('./routes/userRoutes');
 const superviserRoutes = require('./routes/superviserRoutes');
 const periodeMagangRoutes = require('./routes/periodeMagangRoutes');
+const testRoutes = require('./routes/testRoutes');
 
 // Initialize Express
 const app = express();
@@ -29,6 +30,7 @@ app.get('/health', (req, res) => {
 });
 
 // API Routes
+app.use('/api/test', testRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/absensi', absensiRoutes);
 app.use('/api/izin', izinRoutes);
@@ -48,7 +50,7 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 // Start server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
     console.log(`✓ Server berjalan di http://localhost:${PORT}`);

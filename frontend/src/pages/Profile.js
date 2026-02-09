@@ -140,20 +140,30 @@ const Profile = () => {
                         <div className="detail-section">
                             <h2>Informasi Pekerjaan</h2>
                             <div className="detail-row">
-                                <span className="label">Departemen</span>
-                                <span className="value">-</span>
+                                <span className="label">Tipe Pengguna</span>
+                                <span className="value badge">{user?.role === 'USER' ? 'Anak Magang' : user?.role || '-'}</span>
                             </div>
+                            {user?.nim && (
+                                <div className="detail-row">
+                                    <span className="label">NIM / ID Magang</span>
+                                    <span className="value">{user.nim}</span>
+                                </div>
+                            )}
+                            {user?.pembimbing_id && (
+                                <div className="detail-row">
+                                    <span className="label">Pembimbing ID</span>
+                                    <span className="value">{user.pembimbing_id}</span>
+                                </div>
+                            )}
+                            {user?.periode_id && (
+                                <div className="detail-row">
+                                    <span className="label">Periode ID</span>
+                                    <span className="value">{user.periode_id}</span>
+                                </div>
+                            )}
                             <div className="detail-row">
-                                <span className="label">Periode Magang</span>
-                                <span className="value">-</span>
-                            </div>
-                            <div className="detail-row">
-                                <span className="label">Pembimbing</span>
-                                <span className="value">-</span>
-                            </div>
-                            <div className="detail-row">
-                                <span className="label">Sisa Izin</span>
-                                <span className="value">{user?.sisa_izin || 0} hari</span>
+                                <span className="label">Sisa Izin/Cuti</span>
+                                <span className="value badge-info">{user?.sisa_izin || 0} hari</span>
                             </div>
                         </div>
                     </div>

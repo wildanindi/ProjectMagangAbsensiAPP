@@ -189,3 +189,44 @@
     color: #333;
     text-align: right;
 }
+
+.detail-row .badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.detail-row .badge-info {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+    }
+
+    .profile-info {
+        flex: 1;
+    }
+
+    .profile-details {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .detail-row .value {
+        text-align: left;
+    }
+}

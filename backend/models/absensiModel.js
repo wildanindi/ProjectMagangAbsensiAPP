@@ -105,10 +105,13 @@ const getAttendanceSummaryToday = async () => {
                         COUNT(CASE WHEN status = 'TELAT' THEN 1 END) as telat,
                         COUNT(CASE WHEN status = 'ALPHA' THEN 1 END) as alpha,
                         COUNT(*) as total_record
-                    FROM dashboard_absensi_hari_ini`;
+                    FROM absensi 
+                    WHERE tanggal = CURDATE() AND user_id IN (
+                        SELECT id FROM users WHERE role = 'USER'
+                    )`;
         
         const [rows] = await db.query(query);
-        return rows[0];
+        return rows[0] || { hadir: 0, telat: 0, alpha: 0, total_record: 0 };
     } catch (error) {
         throw error;
     }
@@ -123,13 +126,13 @@ const getUsersWithTodayAttendance = async () => {
                         u.email,
                         u.username,
                         u.sisa_izin,
-                        IFNULL(a.status, 'ALPHA') AS status_hari_ini,
-                        IFNULL(a.jam_masuk, NULL) AS jam_masuk_hari_ini,
-                        IFNULL(a.foto_path, NULL) AS foto_hari_ini
+                        COALESCE(a.status, 'ALPHA') AS status_hari_ini,
+                        COALESCE(a.jam_masuk, NULL) AS jam_masuk_hari_ini,
+                        COALESCE(a.foto_path, NULL) AS foto_hari_ini
                     FROM users u
                     LEFT JOIN absensi a 
                         ON u.id = a.user_id 
-                        AND a.tanggal = CURDATE()
+                        AND DATE(a.tanggal) = CURDATE()
                     WHERE u.role = 'USER'
                     ORDER BY u.nama ASC`;
         

@@ -63,6 +63,74 @@
     border: 1px solid #e0e0e0;
 }
 
+.leave-balance-card {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    color: white;
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+}
+
+.leave-balance-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.leave-balance-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.leave-balance-content {
+    text-align: center;
+}
+
+.leave-balance-number {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.leave-balance-subtitle {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 16px;
+}
+
+.leave-balance-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.btn-view-leave {
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.3s ease;
+}
+
+.btn-view-leave:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.status-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 1px solid #e0e0e0;
+}
+
 .status-header {
     font-size: 16px;
     font-weight: 600;

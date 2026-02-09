@@ -8,6 +8,11 @@ export const usersAPI = {
         return response.data;
     },
 
+    getAllInterns: async () => {
+        const response = await apiClient.get('/users/interns');
+        return response.data;
+    },
+
     getUserById: async (id) => {
         const response = await apiClient.get(`/users/${id}`);
         return response.data;
@@ -24,7 +29,17 @@ export const usersAPI = {
     },
 
     createUser: async (userData) => {
-        const response = await apiClient.post('/users', userData);
+        const response = await apiClient.post('/users/create', userData);
+        return response.data;
+    },
+
+    resetPassword: async (id) => {
+        const response = await apiClient.put(`/users/${id}/reset-password`);
+        return response.data;
+    },
+
+    updateLeaveBalance: async (id, leaveBalance) => {
+        const response = await apiClient.put(`/users/${id}/leave-balance`, { sisa_izin: leaveBalance });
         return response.data;
     }
 };

@@ -157,3 +157,130 @@
 .btn-approve:hover {
     background: #059669;
 }
+/* New styles for updated dashboard */
+.error-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #fee2e2;
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+    color: #dc2626;
+    margin-bottom: 24px;
+    font-size: 14px;
+}
+
+.loading {
+    padding: 32px 16px;
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+}
+
+.stat-footer {
+    font-size: 12px;
+    color: #999;
+    margin-top: 8px;
+}
+
+.attendance-table-card {
+    grid-column: 1 / -1;
+}
+
+.attendance-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.attendance-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border-left: 4px solid #3b82f6;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.user-details {
+    flex: 1;
+}
+
+.user-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.user-email {
+    font-size: 12px;
+    color: #999;
+}
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 80px;
+    text-align: center;
+}
+
+.check-time {
+    font-size: 12px;
+    color: #666;
+    min-width: 60px;
+    text-align: right;
+}
+
+.empty-state {
+    padding: 32px 16px;
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .attendance-item {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .status-badge,
+    .check-time {
+        width: 100%;
+        text-align: left;
+    }
+}

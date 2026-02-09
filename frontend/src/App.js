@@ -10,6 +10,7 @@ import LeaveRequest from './pages/LeaveRequest';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
 import EmployeeData from './pages/EmployeeData';
+import Supervisors from './pages/Supervisors';
 import LeaveApprovals from './pages/LeaveApprovals';
 import './App.css';
 
@@ -36,6 +37,7 @@ function App() {
             {/* Admin Routes */}
             <Route path="/admin/dashboard" element={<ProtectedRoute requiredRole="ADMIN"><AdminDashboard /></ProtectedRoute>} />
             <Route path="/admin/employees" element={<ProtectedRoute requiredRole="ADMIN"><EmployeeData /></ProtectedRoute>} />
+            <Route path="/admin/supervisors" element={<ProtectedRoute requiredRole="ADMIN"><Supervisors /></ProtectedRoute>} />
             <Route path="/admin/leave-approvals" element={<ProtectedRoute requiredRole="ADMIN"><LeaveApprovals /></ProtectedRoute>} />
           </Route>
 

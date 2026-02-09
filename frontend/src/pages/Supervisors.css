@@ -1,22 +1,22 @@
-.employee-container {
+.supervisors-container {
     padding: 32px;
 }
 
-.employee-header {
+.supervisors-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 32px;
 }
 
-.employee-header h1 {
+.supervisors-header h1 {
     font-size: 28px;
     font-weight: 700;
     color: #333;
     margin: 0;
 }
 
-.btn-add-employee {
+.btn-add-supervisor {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -30,12 +30,12 @@
     transition: all 0.3s ease;
 }
 
-.btn-add-employee:hover {
+.btn-add-supervisor:hover {
     background: #1e40af;
     transform: translateY(-2px);
 }
 
-.employee-search {
+.supervisors-search {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -47,7 +47,7 @@
     color: #999;
 }
 
-.employee-search input {
+.supervisors-search input {
     flex: 1;
     border: none;
     outline: none;
@@ -55,11 +55,11 @@
     color: #333;
 }
 
-.employee-search input::placeholder {
+.supervisors-search input::placeholder {
     color: #ccc;
 }
 
-.employee-table {
+.supervisors-table {
     background: white;
     border-radius: 12px;
     border: 1px solid #e0e0e0;
@@ -97,7 +97,7 @@ table tbody tr:hover {
     background: #f9f9f9;
 }
 
-.employee-name {
+.supervisor-name {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -115,33 +115,6 @@ table tbody tr:hover {
     justify-content: center;
     font-weight: 600;
     flex-shrink: 0;
-}
-
-.id-role {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.emp-id {
-    font-weight: 600;
-    color: #333;
-}
-
-.emp-role {
-    font-size: 12px;
-    color: #999;
-}
-
-.contact {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.contact .phone {
-    font-size: 12px;
-    color: #999;
 }
 
 .actions {
@@ -281,31 +254,6 @@ table tbody tr:hover {
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.form-group input:disabled {
-    background: #f5f5f5;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-.form-section-title {
-    font-weight: 600;
-    color: #333;
-    font-size: 12px;
-    text-transform: uppercase;
-    margin-top: 8px;
-    margin-bottom: 8px;
-}
-
-.form-note {
-    font-size: 12px;
-    color: #999;
-    margin: 0;
-}
-
 .modal-actions {
     display: flex;
     gap: 12px;
@@ -343,4 +291,17 @@ table tbody tr:hover {
 
 .btn-submit:hover {
     background: #1e40af;
+}
+
+@media (max-width: 768px) {
+    .supervisors-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+    }
+
+    .btn-add-supervisor {
+        width: 100%;
+        justify-content: center;
+    }
 }
