@@ -7,16 +7,28 @@ const pool = mysql.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     port: process.env.DB_PORT || 3306,
-    
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
-db.getConnection((err, connection) => {
+pool.getConnection((err, connection) => {
     if (err) {
-        console.error('Gagal terhubung ke database:', err);
+        if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+            console.error('Database connection was closed.');
+        }
+        if (err.code === 'ER_CON_COUNT_ERROR') {
+            console.error('Database has too many connections.');
+        }
+        if (err.code === 'ER_CONNECTIONKILLED') {
+            console.error('Database connection was killed.');
+        }
         return;
     }
-    console.log('Berhasil terhubung ke database.');
-    connection.release();
+    if (connection) {
+        connection.release();
+        console.log('✓ Database connected successfully');
+    }
 });
 
 module.exports = pool.promise();
