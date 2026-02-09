@@ -15,6 +15,8 @@ const Dashboard = () => {
     const [leaveBalance, setLeaveBalance] = useState(0);
     const [recentActivities, setRecentActivities] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [location, setLocation] = useState(null);
+    const [locationLoading, setLocationLoading] = useState(true);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -22,6 +24,65 @@ const Dashboard = () => {
         }, 1000);
 
         return () => clearInterval(timer);
+    }, []);
+
+    // Get user's real-time location
+    useEffect(() => {
+        const getLocation = async () => {
+            try {
+                if ('geolocation' in navigator) {
+                    navigator.geolocation.getCurrentPosition(
+                        async (position) => {
+                            const { latitude, longitude, accuracy } = position.coords;
+                            
+                            // Try to get address from coordinates using OpenStreetMap's Nominatim API
+                            try {
+                                const response = await fetch(
+                                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
+                                    { headers: { 'Accept-Language': 'id' } }
+                                );
+                                const data = await response.json();
+                                const address = data.address?.city || data.address?.town || data.address?.county || 'Lokasi Tidak Diketahui';
+                                const country = data.address?.country || '';
+                                
+                                setLocation({
+                                    latitude: latitude.toFixed(6),
+                                    longitude: longitude.toFixed(6),
+                                    accuracy: accuracy.toFixed(0),
+                                    address: address,
+                                    country: country,
+                                    fullAddress: `${address}${country ? ', ' + country : ''}`
+                                });
+                            } catch (error) {
+                                // If reverse geocoding fails, just show coordinates
+                                setLocation({
+                                    latitude: latitude.toFixed(6),
+                                    longitude: longitude.toFixed(6),
+                                    accuracy: accuracy.toFixed(0),
+                                    address: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`,
+                                    fullAddress: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`
+                                });
+                            }
+                            setLocationLoading(false);
+                        },
+                        (error) => {
+                            console.error('Error getting location:', error);
+                            setLocation({
+                                address: 'Lokasi Tidak Tersedia',
+                                fullAddress: 'Izinkan akses lokasi untuk menampilkan lokasi Anda'
+                            });
+                            setLocationLoading(false);
+                        },
+                        { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+                    );
+                }
+            } catch (error) {
+                console.error('Geolocation error:', error);
+                setLocationLoading(false);
+            }
+        };
+
+        getLocation();
     }, []);
 
     useEffect(() => {
@@ -83,18 +144,51 @@ const Dashboard = () => {
         <div className="dashboard">
             <h1>Selamat Pagi, {user?.nama}</h1>
 
-            {/* Current Time Card */}
-            <div className="time-card">
-                <div className="time-display">
-                    <div className="time-value">{formatTime(currentTime)}</div>
-                    <div className="time-unit">31 Detik</div>
-                </div>
-                <div className="location-info">
-                    <MapPin size={20} />
-                    <div>
-                        <div className="location-label">Lokasi</div>
-                        <div className="location-value">Kantor Pusat, Jakarta</div>
+            {/* Top Section: Time, Status, and Check-In */}
+            <div className="top-section">
+                {/* Time Card - Left */}
+                <div className="time-card compact">
+                    <div className="time-display">
+                        <div className="time-label-top">Waktu Saat Ini</div>
+                        <div className="time-value">{formatTime(currentTime)}</div>
+                        <div className="time-unit">{currentTime.getSeconds()} Detik</div>
                     </div>
+                    <div className="location-section compact">
+                        <div className="location-header">
+                            <MapPin size={18} className="location-icon" />
+                            <span className="location-label">Lokasi</span>
+                        </div>
+                        {locationLoading ? (
+                            <div className="location-loading">
+                                <div className="spinner-small"></div>
+                            </div>
+                        ) : (
+                            <div className="location-content">
+                                <div className="location-value compact">{location?.fullAddress || 'Lokasi Tidak Tersedia'}</div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Status Kehadiran - Middle */}
+                <div className="status-card middle">
+                    <div className="status-header">Presensi Magang</div>
+                    <div className="status-message">
+                        Anda sudah melakukan check-in hari ini. Catat aktivitas harian di Log Book sebelum pulang.
+                    </div>
+                    <div className="status-badge">Sedang Magang</div>
+                    <div className="status-time">
+                        <Clock size={16} />
+                        <span>Masuk: {formatTime(currentTime)}</span>
+                    </div>
+                </div>
+
+                {/* Check-In/Check-Out Button - Right */}
+                <div className="check-in-section">
+                    <button className="check-in-btn-circle">
+                        <span className="check-in-icon">→</span>
+                    </button>
+                    <div className="btn-label">Check Out</div>
                 </div>
             </div>
 
@@ -113,7 +207,7 @@ const Dashboard = () => {
                         </button>
                     </div>
                 </div>
-            </div> */}
+            </div>
 
             {/* Status Kehadiran */}
             <div className="status-card">
@@ -121,9 +215,7 @@ const Dashboard = () => {
                 <div className="status-message">
                     Anda belum melakukan check-in hari ini. Silakan absen untuk memulai jam kerja.
                 </div>
-                <button className="check-in-btn" onClick={() => navigate('/leave-request')}>
-                    Check In
-                </button>
+                <button className="check-in-btn">Check In</button>
             </div>
 
             {/* Summary Stats */}
