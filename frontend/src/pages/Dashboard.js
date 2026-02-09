@@ -99,7 +99,7 @@ const Dashboard = () => {
             </div>
 
             {/* Leave Balance Card */}
-            <div className="leave-balance-card">
+            {/* <div className="leave-balance-card">
                 <div className="leave-balance-header">
                     <Calendar size={24} />
                     <h3>Sisa Jatah Izin/Cuti</h3>
@@ -113,7 +113,7 @@ const Dashboard = () => {
                         </button>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
             {/* Status Kehadiran */}
             <div className="status-card">
@@ -121,7 +121,9 @@ const Dashboard = () => {
                 <div className="status-message">
                     Anda belum melakukan check-in hari ini. Silakan absen untuk memulai jam kerja.
                 </div>
-                <button className="check-in-btn">Check In</button>
+                <button className="check-in-btn" onClick={() => navigate('/leave-request')}>
+                    Check In
+                </button>
             </div>
 
             {/* Summary Stats */}
