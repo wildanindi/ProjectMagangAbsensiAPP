@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { absensiAPI } from '../api/absensi';
 import { izinAPI } from '../api/izin';
-import { MapPin, Clock, Calendar, AlertCircle } from 'lucide-react';
+import { MapPin, Clock, Calendar, AlertCircle, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import Webcam from 'react-webcam';
+import Swal from 'sweetalert2';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -17,6 +19,10 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [location, setLocation] = useState(null);
     const [locationLoading, setLocationLoading] = useState(true);
+    const [showCamera, setShowCamera] = useState(false);
+    const [capturedImage, setCapturedImage] = useState(null);
+    const [submitting, setSubmitting] = useState(false);
+    const webcamRef = React.useRef(null);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -185,7 +191,10 @@ const Dashboard = () => {
 
                 {/* Check-In Button - Right */}
                 <div className="check-in-section">
-                    <button className="check-in-btn-circle">
+                    <button 
+                        className="check-in-btn-circle"
+                        onClick={() => setShowCamera(true)}
+                    >
                         <span className="check-in-icon">→</span>
                     </button>
                     <div className="btn-label">Submit Presensi</div>
@@ -276,6 +285,104 @@ const Dashboard = () => {
                     <div className="no-activities">Belum ada aktivitas</div>
                 )}
             </div>
+
+            {/* Camera Modal */}
+            {showCamera && (
+                <div className="camera-modal-overlay">
+                    <div className="camera-modal-content">
+                        <div className="camera-modal-header">
+                            <h2>Ambil Foto Presensi</h2>
+                            <button 
+                                className="camera-modal-close"
+                                onClick={() => {
+                                    setShowCamera(false);
+                                    setCapturedImage(null);
+                                }}
+                            >
+                                <X size={24} />
+                            </button>
+                        </div>
+
+                        <div className="camera-modal-body">
+                            {!capturedImage ? (
+                                <div className="webcam-container">
+                                    <Webcam
+                                        ref={webcamRef}
+                                        screenshotFormat="image/jpeg"
+                                        className="webcam-feed"
+                                        facingMode="user"
+                                    />
+                                </div>
+                            ) : (
+                                <div className="captured-image-container">
+                                    <img src={capturedImage} alt="Captured" className="captured-image" />
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="camera-modal-actions">
+                            {!capturedImage ? (
+                                <>
+                                    <button 
+                                        className="btn-camera-cancel"
+                                        onClick={() => {
+                                            setShowCamera(false);
+                                            setCapturedImage(null);
+                                        }}
+                                    >
+                                        Batal
+                                    </button>
+                                    <button 
+                                        className="btn-camera-capture"
+                                        onClick={() => {
+                                            const imageSrc = webcamRef.current.getScreenshot();
+                                            setCapturedImage(imageSrc);
+                                        }}
+                                    >
+                                        Ambil Foto
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <button 
+                                        className="btn-camera-cancel"
+                                        onClick={() => setCapturedImage(null)}
+                                    >
+                                        Ulangi Foto
+                                    </button>
+                                    <button 
+                                        className="btn-camera-submit"
+                                        onClick={async () => {
+                                            setSubmitting(true);
+                                            try {
+                                                await absensiAPI.checkIn({
+                                                    foto_base64: capturedImage
+                                                });
+                                                Swal.fire('Sukses', 'Presensi berhasil disubmit', 'success');
+                                                setShowCamera(false);
+                                                setCapturedImage(null);
+                                                // Refresh attendance data
+                                                const summaryResponse = await absensiAPI.getAttendanceStats();
+                                                setAttendanceSummary(summaryResponse.data);
+                                                const historyResponse = await absensiAPI.getUserAttendanceHistory(5, 0);
+                                                setRecentActivities(historyResponse.data || []);
+                                            } catch (error) {
+                                                const errorMsg = error.response?.data?.message || 'Gagal submit presensi';
+                                                Swal.fire('Error', errorMsg, 'error');
+                                            } finally {
+                                                setSubmitting(false);
+                                            }
+                                        }}
+                                        disabled={submitting}
+                                    >
+                                        {submitting ? 'Mengupload...' : 'Submit Presensi'}
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
