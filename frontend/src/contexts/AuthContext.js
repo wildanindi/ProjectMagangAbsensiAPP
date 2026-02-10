@@ -11,16 +11,37 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         const token = localStorage.getItem('token');
-        
-        if (storedUser && token) {
-            try {
-                setUser(JSON.parse(storedUser));
-            } catch (err) {
-                localStorage.removeItem('user');
-                localStorage.removeItem('token');
+
+        const initialize = async () => {
+            if (token) {
+                try {
+                    const profileResp = await authAPI.getCurrentUser();
+                    if (profileResp && profileResp.success) {
+                        const profile = profileResp.data;
+                        localStorage.setItem('user', JSON.stringify(profile));
+                        setUser(profile);
+                        setLoading(false);
+                        return;
+                    }
+                } catch (err) {
+                    console.error('Error fetching profile on init:', err);
+                    // fall through to use storedUser if available
+                }
             }
-        }
-        setLoading(false);
+
+            if (storedUser && token) {
+                try {
+                    setUser(JSON.parse(storedUser));
+                } catch (err) {
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('token');
+                }
+            }
+
+            setLoading(false);
+        };
+
+        initialize();
     }, []);
 
     const login = async (username, password) => {
@@ -31,14 +52,28 @@ export const AuthProvider = ({ children }) => {
             if (response.success) {
                 const userData = response.data;
                 const token = userData.token;
-                
-                // Remove token from userData before storing
-                const userDataToStore = { ...userData };
-                delete userDataToStore.token;
-                
+
+                // store token first
                 localStorage.setItem('token', token);
-                localStorage.setItem('user', JSON.stringify(userDataToStore));
-                setUser(userDataToStore);
+
+                // fetch full profile with token
+                try {
+                    const profileResp = await authAPI.getCurrentUser();
+                    if (profileResp && profileResp.success) {
+                        const profile = profileResp.data;
+                        localStorage.setItem('user', JSON.stringify(profile));
+                        setUser(profile);
+                        return response;
+                    }
+                } catch (err) {
+                    // fallback to minimal user data from login response
+                    const userDataToStore = { ...userData };
+                    delete userDataToStore.token;
+                    localStorage.setItem('user', JSON.stringify(userDataToStore));
+                    setUser(userDataToStore);
+                    return response;
+                }
+                
                 return response;
             }
             throw new Error(response.message || 'Login failed');
