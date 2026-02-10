@@ -11,11 +11,11 @@ const Profile = () => {
     const [showPasswordModal, setShowPasswordModal] = useState(false);
     const [loading, setLoading] = useState(false);
     
-    // Profile form state
+    // Profile form state (use backend field name `nohp`)
     const [formData, setFormData] = useState({
         nama: user?.nama || '',
         email: user?.email || '',
-        telepon: user?.telepon || ''
+        nohp: user?.nohp || ''
     });
 
     // Password form state
@@ -172,8 +172,8 @@ const Profile = () => {
                             <label>Nomor Telepon</label>
                             <input
                                 type="tel"
-                                name="telepon"
-                                value={formData.telepon}
+                                name="nohp"
+                                value={formData.nohp}
                                 onChange={handleChange}
                                 disabled={loading}
                             />
@@ -224,7 +224,7 @@ const Profile = () => {
                                 <span className="detail-icon">🏫</span>
                                 <div className="detail-content">
                                     <span className="detail-label">Asal Kampus / Sekolah</span>
-                                    <span className="detail-value">{user?.kampus || 'Universitas Teknologi Digital'}</span>
+                                    <span className="detail-value">{user?.asal_studi || '-'}</span>
                                 </div>
                             </div>
                             <div className="detail-row">
@@ -238,7 +238,7 @@ const Profile = () => {
                                 <span className="detail-icon">📱</span>
                                 <div className="detail-content">
                                     <span className="detail-label">Nomor Telepon / WhatsApp</span>
-                                    <span className="detail-value">{user?.telepon || '+62 812 3456 7890'}</span>
+                                    <span className="detail-value">{user?.nohp || '-'}</span>
                                 </div>
                             </div>
                         </div>
