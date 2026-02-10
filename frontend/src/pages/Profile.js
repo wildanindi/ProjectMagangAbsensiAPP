@@ -128,7 +128,7 @@ const Profile = () => {
                     </div>
                     <div className="profile-header-info">
                         <h1>{user?.nama}</h1>
-                        <p>{user?.role === 'ADMIN' ? 'Administrator' : 'UI/UX Intern (Intern)'}</p>
+                        <p>{user?.role}</p>
                     </div>
                     {!isEditing && (
                         <button 
@@ -201,14 +201,20 @@ const Profile = () => {
                         {/* Informasi Peserta */}
                         <div className="detail-section">
                             <h2>INFORMASI PESERTA</h2>
-                            <div className="detail-row">
-                                <span className="label">ID Karyawan</span>
-                                <span className="value">{user?.id}</span>
-                            </div>
-                            <div className="detail-row">
-                                <span className="label">Username</span>
-                                <span className="value">{user?.username}</span>
-                            </div>
+                                <div className="detail-row">
+                                    <span className="detail-icon">🆔</span>
+                                    <div className="detail-content">
+                                        <span className="detail-label">ID Karyawan</span>
+                                        <span className="detail-value">{user?.id}</span>
+                                    </div>
+                                </div>
+                                <div className="detail-row">
+                                    <span className="detail-icon">👤</span>
+                                    <div className="detail-content">
+                                        <span className="detail-label">Username</span>
+                                        <span className="detail-value">{user?.username}</span>
+                                    </div>
+                                </div>
                         </div>
 
                         {/* Data Pribadi */}

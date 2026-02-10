@@ -188,7 +188,7 @@ const Dashboard = () => {
                     <button className="check-in-btn-circle">
                         <span className="check-in-icon">→</span>
                     </button>
-                    <div className="btn-label">Check In</div>
+                    <div className="btn-label">Submit Presensi</div>
                 </div>
             </div>
 
