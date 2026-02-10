@@ -334,30 +334,24 @@ const Dashboard = () => {
                                     </button>
                                     <button 
                                         className="btn-camera-capture"
-                                        onClick={() => {
+                                        onClick={async () => {
                                             const imageSrc = webcamRef.current.getScreenshot();
                                             setCapturedImage(imageSrc);
-                                        }}
-                                    >
-                                        Ambil Foto
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    <button 
-                                        className="btn-camera-cancel"
-                                        onClick={() => setCapturedImage(null)}
-                                    >
-                                        Ulangi Foto
-                                    </button>
-                                    <button 
-                                        className="btn-camera-submit"
-                                        onClick={async () => {
+                                            
+                                            // Auto-submit after capture
                                             setSubmitting(true);
                                             try {
-                                                await absensiAPI.checkIn({
-                                                    foto_base64: capturedImage
-                                                });
+                                                // Convert base64 to File object for proper upload
+                                                const base64Response = await fetch(imageSrc);
+                                                const blob = await base64Response.blob();
+                                                const file = new File([blob], 'presensi.jpg', { type: 'image/jpeg' });
+                                                
+                                                const formData = new FormData();
+                                                formData.append('photo', file);
+
+                                                console.log('Sending formData with file:', file.name, file.size, file.type);
+
+                                                await absensiAPI.checkIn(formData);
                                                 Swal.fire('Sukses', 'Presensi berhasil disubmit', 'success');
                                                 setShowCamera(false);
                                                 setCapturedImage(null);
@@ -367,6 +361,7 @@ const Dashboard = () => {
                                                 const historyResponse = await absensiAPI.getUserAttendanceHistory(5, 0);
                                                 setRecentActivities(historyResponse.data || []);
                                             } catch (error) {
+                                                console.error('Check-in error:', error);
                                                 const errorMsg = error.response?.data?.message || 'Gagal submit presensi';
                                                 Swal.fire('Error', errorMsg, 'error');
                                             } finally {
@@ -375,9 +370,13 @@ const Dashboard = () => {
                                         }}
                                         disabled={submitting}
                                     >
-                                        {submitting ? 'Mengupload...' : 'Submit Presensi'}
+                                        {submitting ? 'Mengupload...' : 'Ambil Foto & Submit'}
                                     </button>
                                 </>
+                            ) : (
+                                <div className="submitting-indicator">
+                                    <span>Mengupload presensi...</span>
+                                </div>
                             )}
                         </div>
                     </div>

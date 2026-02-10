@@ -1,8 +1,12 @@
 import apiClient from './apiClient';
 
 export const absensiAPI = {
-    checkIn: async (absensiData) => {
-        const response = await apiClient.post('/absensi/check-in', absensiData);
+    checkIn: async (formData) => {
+        const response = await apiClient.post('/absensi/check-in', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
         return response.data;
     },
 

@@ -32,18 +32,25 @@ const fileFilter = (req, file, cb) => {
 };
 
 // Upload middleware for attendance photo
-const uploadAbsensiPhoto = multer({
+const upload = multer({
     storage: storage,
     fileFilter: fileFilter,
     limits: {
         fileSize: 5 * 1024 * 1024 // 5MB max
     }
-}).single('photo');
+});
 
 // Wrapper to handle multer errors
 const handleUpload = (req, res, next) => {
-    uploadAbsensiPhoto(req, res, (err) => {
+    console.log('Upload middleware called');
+    console.log('Content-Type:', req.headers['content-type']);
+    
+    upload.single('photo')(req, res, (err) => {
+        console.log('After multer, file:', req.file);
+        console.log('After multer, body:', req.body);
+        
         if (err instanceof multer.MulterError) {
+            console.log('Multer error:', err);
             if (err.code === 'LIMIT_FILE_SIZE') {
                 return res.status(400).json({
                     success: false,
@@ -55,6 +62,7 @@ const handleUpload = (req, res, next) => {
                 message: err.message
             });
         } else if (err) {
+            console.log('Other error:', err);
             return res.status(400).json({
                 success: false,
                 message: err.message
