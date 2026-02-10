@@ -334,15 +334,31 @@ const Dashboard = () => {
                                     </button>
                                     <button 
                                         className="btn-camera-capture"
-                                        onClick={async () => {
+                                        onClick={() => {
                                             const imageSrc = webcamRef.current.getScreenshot();
                                             setCapturedImage(imageSrc);
-                                            
-                                            // Auto-submit after capture
+                                        }}
+                                    >
+                                        Ambil Foto
+                                    </button>
+                                </>
+                            ) : !submitting ? (
+                                <>
+                                    <button 
+                                        className="btn-camera-cancel"
+                                        onClick={() => {
+                                            setCapturedImage(null);
+                                        }}
+                                    >
+                                        Ulang Foto
+                                    </button>
+                                    <button 
+                                        className="btn-camera-capture"
+                                        onClick={async () => {
                                             setSubmitting(true);
                                             try {
                                                 // Convert base64 to File object for proper upload
-                                                const base64Response = await fetch(imageSrc);
+                                                const base64Response = await fetch(capturedImage);
                                                 const blob = await base64Response.blob();
                                                 const file = new File([blob], 'presensi.jpg', { type: 'image/jpeg' });
                                                 
@@ -370,7 +386,7 @@ const Dashboard = () => {
                                         }}
                                         disabled={submitting}
                                     >
-                                        {submitting ? 'Mengupload...' : 'Ambil Foto & Submit'}
+                                        Submit Presensi
                                     </button>
                                 </>
                             ) : (
