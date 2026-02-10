@@ -2,55 +2,64 @@
     padding: 32px;
 }
 
-.profile-header {
-    background: linear-gradient(135deg, #3b82f6, #5b21b6);
+/* Profile Header Card */
+.profile-header-card {
+    background: white;
     border-radius: 16px;
-    padding: 32px;
-    color: white;
-    display: flex;
-    align-items: center;
-    gap: 24px;
+    overflow: hidden;
     margin-bottom: 32px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e0e0e0;
 }
 
-.profile-avatar {
-    width: 80px;
-    height: 80px;
+.profile-header-background {
+    height: 120px;
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+}
+
+.profile-header-content {
+    padding: 32px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 32px;
+    margin-top: -50px;
+    position: relative;
+    z-index: 1;
+}
+
+.profile-avatar-large {
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+    border: 6px solid white;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
+    font-size: 56px;
     font-weight: 700;
+    color: white;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.25);
     flex-shrink: 0;
 }
 
-.profile-info {
-    flex: 1;
+.profile-header-info {
+    padding: 24px 0;
 }
 
-.profile-info h1 {
-    font-size: 24px;
+.profile-header-info h1 {
+    font-size: 28px;
     font-weight: 700;
+    color: #333;
     margin: 0 0 8px;
 }
 
-.profile-info p {
+.profile-header-info p {
+    font-size: 16px;
+    color: #999;
     margin: 0;
-    opacity: 0.9;
-    font-size: 14px;
-}
-
-.profile-icon {
-    display: flex;
-    gap: 12px;
-}
-
-.profile-header-buttons {
-    display: flex;
-    gap: 12px;
-    align-items: center;
+    font-weight: 500;
 }
 
 .edit-btn {
@@ -58,17 +67,19 @@
     align-items: center;
     gap: 8px;
     padding: 12px 24px;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: white;
+    color: #333;
+    border: 2px solid #d0d0d0;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
     transition: all 0.3s ease;
+    height: fit-content;
 }
 
 .edit-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
+    border-color: #3b82f6;
+    color: #3b82f6;
 }
 
 .change-password-btn {
@@ -76,9 +87,9 @@
     align-items: center;
     gap: 8px;
     padding: 12px 24px;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: white;
+    color: #333;
+    border: 2px solid #d0d0d0;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
@@ -86,9 +97,9 @@
 }
 
 .change-password-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
-};
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
 
 .profile-content {
     background: white;
@@ -193,46 +204,65 @@
 }
 
 .detail-section h2 {
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 700;
     color: #333;
-    margin: 0 0 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #e0e0e0;
+    margin: 0;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
 .detail-row {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-.detail-row .label {
-    color: #666;
-    font-size: 14px;
+.detail-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.detail-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.detail-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.detail-label {
+    font-size: 13px;
+    color: #999;
     font-weight: 500;
 }
 
-.detail-row .value {
-    font-weight: 600;
+.detail-value {
+    font-size: 15px;
     color: #333;
-    text-align: right;
-}
-
-.detail-row .badge {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
     font-weight: 600;
-    background: #dbeafe;
-    color: #1e40af;
 }
 
-.detail-row .badge-info {
-    background: #d1fae5;
-    color: #065f46;
+/* Profile Details Grid */
+.profile-details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 48px;
+    margin-bottom: 32px;
+}
+
+/* Password Section */
+.password-section {
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 24px;
+    border-top: 1px solid #e0e0e0;
 }
 
 /* Modal Styles */

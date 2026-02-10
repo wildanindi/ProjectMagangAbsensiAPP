@@ -107,7 +107,7 @@ const Profile = () => {
             const response = await usersAPI.updateUser(user.id, formData);
 
             if (response.success) {
-                Swal.fire('Sukses', 'Profil berhasil dipbarui', 'success');
+                Swal.fire('Sukses', 'Profil berhasil diperbarui', 'success');
                 setIsEditing(false);
             }
         } catch (error) {
@@ -119,36 +119,30 @@ const Profile = () => {
 
     return (
         <div className="profile-container">
-            <div className="profile-header">
-                <div className="profile-avatar">
-                    {user?.nama?.charAt(0).toUpperCase()}
-                </div>
-                <div className="profile-info">
-                    <h1>{user?.nama}</h1>
-                    <p>{user?.role === 'ADMIN' ? 'Administrator' : 'Anak Magang'}</p>
-                </div>
-                <div className="profile-header-buttons">
+            {/* Profile Header */}
+            <div className="profile-header-card">
+                <div className="profile-header-background"></div>
+                <div className="profile-header-content">
+                    <div className="profile-avatar-large">
+                        {user?.nama?.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="profile-header-info">
+                        <h1>{user?.nama}</h1>
+                        <p>{user?.role === 'ADMIN' ? 'Administrator' : 'UI/UX Intern (Intern)'}</p>
+                    </div>
                     {!isEditing && (
-                        <>
-                            <button 
-                                className="edit-btn"
-                                onClick={() => setIsEditing(true)}
-                            >
-                                <Edit2 size={18} />
-                                <span>Edit Profil</span>
-                            </button>
-                            <button 
-                                className="change-password-btn"
-                                onClick={() => setShowPasswordModal(true)}
-                            >
-                                <Key size={18} />
-                                <span>Ubah Password</span>
-                            </button>
-                        </>
+                        <button 
+                            className="edit-btn"
+                            onClick={() => setIsEditing(true)}
+                        >
+                            <Edit2 size={18} />
+                            <span>Edit Profil</span>
+                        </button>
                     )}
                 </div>
             </div>
 
+            {/* Profile Content */}
             <div className="profile-content">
                 {isEditing ? (
                     <form onSubmit={handleSubmit} className="profile-form">
@@ -203,56 +197,57 @@ const Profile = () => {
                         </div>
                     </form>
                 ) : (
-                    <div className="profile-details">
+                    <div className="profile-details-grid">
+                        {/* Informasi Peserta */}
                         <div className="detail-section">
-                            <h2>Informasi Pribadi</h2>
+                            <h2>INFORMASI PESERTA</h2>
                             <div className="detail-row">
-                                <span className="label">ID Karyawan</span>
-                                <span className="value">{user?.id}</span>
-                            </div>
-                            <div className="detail-row">
-                                <span className="label">Email</span>
-                                <span className="value">{user?.email || '-'}</span>
-                            </div>
-                            <div className="detail-row">
-                                <span className="label">Username</span>
-                                <span className="value">{user?.username}</span>
-                            </div>
-                            <div className="detail-row">
-                                <span className="label">Telepon</span>
-                                <span className="value">{user?.telepon || '-'}</span>
+                                <span className="detail-icon">👤</span>
+                                <div className="detail-content">
+                                    <span className="detail-label">ID Magang / NIM</span>
+                                    <span className="detail-value">{user?.id}</span>
+                                </div>
                             </div>
                         </div>
 
+                        {/* Data Pribadi */}
                         <div className="detail-section">
-                            <h2>Informasi Pekerjaan</h2>
+                            <h2>DATA PRIBADI</h2>
                             <div className="detail-row">
-                                <span className="label">Tipe Pengguna</span>
-                                <span className="value badge">{user?.role === 'USER' ? 'Anak Magang' : user?.role || '-'}</span>
+                                <span className="detail-icon">🏫</span>
+                                <div className="detail-content">
+                                    <span className="detail-label">Asal Kampus / Sekolah</span>
+                                    <span className="detail-value">{user?.kampus || 'Universitas Teknologi Digital'}</span>
+                                </div>
                             </div>
-                            {user?.nim && (
-                                <div className="detail-row">
-                                    <span className="label">NIM / ID Magang</span>
-                                    <span className="value">{user.nim}</span>
+                            <div className="detail-row">
+                                <span className="detail-icon">✉️</span>
+                                <div className="detail-content">
+                                    <span className="detail-label">Email Pribadi / Kampus</span>
+                                    <span className="detail-value">{user?.email || 'student@university.ac.id'}</span>
                                 </div>
-                            )}
-                            {user?.pembimbing_id && (
-                                <div className="detail-row">
-                                    <span className="label">Pembimbing ID</span>
-                                    <span className="value">{user.pembimbing_id}</span>
+                            </div>
+                            <div className="detail-row">
+                                <span className="detail-icon">📱</span>
+                                <div className="detail-content">
+                                    <span className="detail-label">Nomor Telepon / WhatsApp</span>
+                                    <span className="detail-value">{user?.telepon || '+62 812 3456 7890'}</span>
                                 </div>
-                            )}
-                            {user?.periode_id && (
-                                <div className="detail-row">
-                                    <span className="label">Periode ID</span>
-                                    <span className="value">{user.periode_id}</span>
-                                </div>
-                            )}
-                            {/* <div className="detail-row">
-                                <span className="label">Sisa Izin/Cuti</span>
-                                <span className="value badge-info">{user?.sisa_izin || 0} hari</span>
-                            </div> */}
+                            </div>
                         </div>
+                    </div>
+                )}
+
+                {/* Password Change Button */}
+                {!isEditing && (
+                    <div className="password-section">
+                        <button 
+                            className="change-password-btn"
+                            onClick={() => setShowPasswordModal(true)}
+                        >
+                            <Key size={18} />
+                            <span>Ubah Password</span>
+                        </button>
                     </div>
                 )}
             </div>

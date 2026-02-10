@@ -183,12 +183,12 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-                {/* Check-In/Check-Out Button - Right */}
+                {/* Check-In Button - Right */}
                 <div className="check-in-section">
                     <button className="check-in-btn-circle">
                         <span className="check-in-icon">→</span>
                     </button>
-                    <div className="btn-label">Check Out</div>
+                    <div className="btn-label">Check In</div>
                 </div>
             </div>
 
@@ -209,14 +209,7 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Status Kehadiran */}
-            <div className="status-card">
-                <div className="status-header">Status Kehadiran</div>
-                <div className="status-message">
-                    Anda belum melakukan check-in hari ini. Silakan absen untuk memulai jam kerja.
-                </div>
-                <button className="check-in-btn">Check In</button>
-            </div>
+
 
             {/* Summary Stats */}
             {attendanceSummary && (
