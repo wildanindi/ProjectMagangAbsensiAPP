@@ -35,7 +35,7 @@ CREATE TABLE users (
   nama VARCHAR(100) NOT NULL,
   email VARCHAR(100) UNIQUE,
   nohp VARCHAR(20),
-  asal_kampus VARCHAR(150),
+  asal_studi VARCHAR(150),
   username VARCHAR(50) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
   role ENUM('ADMIN','USER') NOT NULL,
