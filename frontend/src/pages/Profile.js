@@ -207,7 +207,7 @@ const Profile = () => {
                         <div className="detail-section">
                             <h2>Informasi Pribadi</h2>
                             <div className="detail-row">
-                                <span className="label">ID Karyawan</span>
+                                <span className="label">ID Magang</span>
                                 <span className="value">{user?.id}</span>
                             </div>
                             <div className="detail-row">
