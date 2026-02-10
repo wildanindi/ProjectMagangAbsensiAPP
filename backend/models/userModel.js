@@ -8,6 +8,8 @@ const getAllUsers = async (role = null) => {
                         u.id, 
                         u.nama, 
                         u.email, 
+                        u.nohp,
+                        u.asal_studi,
                         u.username, 
                         u.role, 
                         u.pembimbing_id,
@@ -41,6 +43,8 @@ const getUserById = async (id) => {
                         u.id, 
                         u.nama, 
                         u.email, 
+                        u.nohp,
+                        u.asal_studi,
                         u.username, 
                         u.password,
                         u.role, 
@@ -89,18 +93,20 @@ const getUserByUsername = async (username) => {
 // Create new user
 const createUser = async (userData) => {
     try {
-        const { nama, email, username, password, role, pembimbing_id, periode_id, sisa_izin } = userData;
+        const { nama, email, nohp, asal_studi, username, password, role, pembimbing_id, periode_id, sisa_izin } = userData;
         
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
         
         const query = `INSERT INTO users 
-                        (nama, email, username, password, role, pembimbing_id, periode_id, sisa_izin)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+                        (nama, email, nohp, asal_studi, username, password, role, pembimbing_id, periode_id, sisa_izin)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         
         const [result] = await db.query(query, [
             nama, 
             email, 
+            nohp || null,
+            asal_studi || null,
             username, 
             hashedPassword, 
             role, 
@@ -118,13 +124,13 @@ const createUser = async (userData) => {
 // Update user
 const updateUser = async (id, userData) => {
     try {
-        const { nama, email, pembimbing_id, periode_id } = userData;
+        const { nama, email, nohp, asal_studi, pembimbing_id, periode_id } = userData;
         
         const query = `UPDATE users 
-                    SET nama = ?, email = ?, pembimbing_id = ?, periode_id = ?
+                    SET nama = ?, email = ?, nohp = ?, asal_studi = ?, pembimbing_id = ?, periode_id = ?
                     WHERE id = ?`;
         
-        await db.query(query, [nama, email, pembimbing_id || null, periode_id || null, id]);
+        await db.query(query, [nama, email, nohp || null, asal_studi || null, pembimbing_id || null, periode_id || null, id]);
         
         return { id, ...userData };
     } catch (error) {

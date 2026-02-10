@@ -16,6 +16,8 @@ const EmployeeData = () => {
         nama: '',
         nim: '',
         email: '',
+        nohp: '',
+        asal_studi: '',
         username: '',
         password: '123456',
         pembimbing_id: '',
@@ -56,6 +58,8 @@ const EmployeeData = () => {
             nama: '',
             nim: '',
             email: '',
+            nohp: '',
+            asal_studi: '',
             username: '',
             password: '123456',
             pembimbing_id: '',
@@ -84,6 +88,8 @@ const EmployeeData = () => {
             nama: employee.nama || '',
             nim: employee.nim || '',
             email: employee.email || '',
+            nohp: employee.nohp || '',
+            asal_studi: employee.asal_studi || '',
             username: employee.username || '',
             password: '123456',
             pembimbing_id: employee.pembimbing_id || '',
@@ -115,6 +121,8 @@ const EmployeeData = () => {
                 const updateData = {
                     nama: formData.nama,
                     email: formData.email,
+                    nohp: formData.nohp || null,
+                    asal_studi: formData.asal_studi || null,
                     pembimbing_id: formData.pembimbing_id || null,
                 };
                 await usersAPI.updateUser(editingId, updateData);
@@ -124,6 +132,8 @@ const EmployeeData = () => {
                 const createData = {
                     nama: formData.nama,
                     email: formData.email,
+                    nohp: formData.nohp || null,
+                    asal_studi: formData.asal_studi || null,
                     username: formData.username,
                     password: formData.password,
                     pembimbing_id: formData.pembimbing_id || null,
@@ -204,6 +214,8 @@ const EmployeeData = () => {
                             <th>NIM / ID MAGANG</th>
                             <th>USERNAME</th>
                             <th>EMAIL</th>
+                            <th>NO. HP</th>
+                            <th>ASAL STUDI</th>
                             <th>PEMBIMBING</th>
                             <th>AKSI</th>
                         </tr>
@@ -211,7 +223,7 @@ const EmployeeData = () => {
                     <tbody>
                         {loading ? (
                             <tr>
-                                <td colSpan="6" className="text-center">Memuat...</td>
+                                <td colSpan="8" className="text-center">Memuat...</td>
                             </tr>
                         ) : filteredEmployees.length > 0 ? (
                             filteredEmployees.map((emp) => (
@@ -223,7 +235,9 @@ const EmployeeData = () => {
                                     <td>{emp.nim || '-'}</td>
                                     <td>{emp.username}</td>
                                     <td>{emp.email || '-'}</td>
-                                    <td>{emp.nama ? `${emp.nama}` : '-'}</td>
+                                    <td>{emp.nohp || '-'}</td>
+                                    <td>{emp.asal_studi || '-'}</td>
+                                    <td>{emp.pembimbing_nama || '-'}</td>
                                     <td>
                                         <div className="actions">
                                             <button 
@@ -246,7 +260,7 @@ const EmployeeData = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="6" className="text-center">Tidak ada data anak magang</td>
+                                <td colSpan="8" className="text-center">Tidak ada data anak magang</td>
                             </tr>
                         )}
                     </tbody>
@@ -333,7 +347,7 @@ const EmployeeData = () => {
                             </div>
 
                             <div className="form-group">
-                                <label>Email Kampus / Pribadi</label>
+                                <label>Email Pribadi</label>
                                 <input 
                                     type="email" 
                                     name="email"
@@ -341,6 +355,29 @@ const EmployeeData = () => {
                                     value={formData.email}
                                     onChange={handleInputChange}
                                 />
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>No. HP</label>
+                                    <input 
+                                        type="text" 
+                                        name="nohp"
+                                        placeholder="081234567890"
+                                        value={formData.nohp}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Asal Studi</label>
+                                    <input 
+                                        type="text" 
+                                        name="asal_studi"
+                                        placeholder=""
+                                        value={formData.asal_studi}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
                             </div>
 
                             <div className="form-section-title">AKUN LOGIN PESERTA</div>
