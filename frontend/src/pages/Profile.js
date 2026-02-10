@@ -202,11 +202,20 @@ const Profile = () => {
                         <div className="detail-section">
                             <h2>INFORMASI PESERTA</h2>
                             <div className="detail-row">
-                                <span className="detail-icon">👤</span>
-                                <div className="detail-content">
-                                    <span className="detail-label">ID Magang / NIM</span>
-                                    <span className="detail-value">{user?.id}</span>
-                                </div>
+                                <span className="label">ID Karyawan</span>
+                                <span className="value">{user?.id}</span>
+                            </div>
+                            <div className="detail-row">
+                                <span className="label">Email</span>
+                                <span className="value">{user?.email || '-'}</span>
+                            </div>
+                            <div className="detail-row">
+                                <span className="label">Username</span>
+                                <span className="value">{user?.username}</span>
+                            </div>
+                            <div className="detail-row">
+                                <span className="label">Telepon</span>
+                                <span className="value">{user?.telepon || '-'}</span>
                             </div>
                         </div>
 

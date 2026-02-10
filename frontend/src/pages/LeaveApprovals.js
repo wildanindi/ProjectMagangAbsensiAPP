@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { izinAPI } from '../api/izin';
-import { Check, X } from 'lucide-react';
+import { Calendar, Check, X } from 'lucide-react';
 import Swal from 'sweetalert2';
 import './LeaveApprovals.css';
 
@@ -129,7 +129,7 @@ const LeaveApprovals = () => {
                             </div>
 
                             <div className="approval-dates">
-                                <span>📅 {request.tanggal_mulai} s/d {request.tanggal_selesai}</span>
+                                <span><Calendar size={20} /> {request.tanggal_mulai} s/d {request.tanggal_selesai}</span>
                             </div>
 
                             <div className="approval-reason">
