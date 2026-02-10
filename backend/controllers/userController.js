@@ -71,7 +71,7 @@ const getUserDetail = async (req, res) => {
 // Create new user (Admin - untuk create anak magang)
 const createIntern = async (req, res) => {
     try {
-        const { nama, email, username, password, pembimbing_id, periode_id, sisa_izin } = req.body;
+        const { nama, email, nohp, asal_studi, username, password, pembimbing_id, periode_id, sisa_izin } = req.body;
 
         // Validate
         if (!nama || !username || !password) {
@@ -94,6 +94,8 @@ const createIntern = async (req, res) => {
         const userData = {
             nama,
             email: email || null,
+            nohp: nohp || null,
+            asal_studi: asal_studi || null,
             username,
             password,
             role: 'USER',
@@ -111,6 +113,8 @@ const createIntern = async (req, res) => {
                 id: newUser.id,
                 nama: newUser.nama,
                 email: newUser.email,
+                nohp: newUser.nohp,
+                asal_studi: newUser.asal_studi,
                 username: newUser.username,
                 role: newUser.role,
                 pembimbing_id: newUser.pembimbing_id,
@@ -131,7 +135,7 @@ const createIntern = async (req, res) => {
 const updateUserData = async (req, res) => {
     try {
         const { id } = req.params;
-        const { nama, email, pembimbing_id, periode_id } = req.body;
+        const { nama, email, nohp, asal_studi, pembimbing_id, periode_id } = req.body;
 
         // Validate
         if (!nama) {
@@ -153,6 +157,8 @@ const updateUserData = async (req, res) => {
         const userData = {
             nama,
             email: email || null,
+            nohp: nohp || null,
+            asal_studi: asal_studi || null,
             pembimbing_id: pembimbing_id || null,
             periode_id: periode_id || null
         };
