@@ -14,7 +14,6 @@ const EmployeeData = () => {
     const [supervisors, setSupervisors] = useState([]);
     const [formData, setFormData] = useState({
         nama: '',
-        nim: '',
         email: '',
         nohp: '',
         asal_studi: '',
@@ -56,7 +55,6 @@ const EmployeeData = () => {
     const resetForm = () => {
         setFormData({
             nama: '',
-            nim: '',
             email: '',
             nohp: '',
             asal_studi: '',
@@ -86,7 +84,6 @@ const EmployeeData = () => {
     const handleEditClick = (employee) => {
         setFormData({
             nama: employee.nama || '',
-            nim: employee.nim || '',
             email: employee.email || '',
             nohp: employee.nohp || '',
             asal_studi: employee.asal_studi || '',
@@ -211,7 +208,6 @@ const EmployeeData = () => {
                     <thead>
                         <tr>
                             <th>NAMA</th>
-                            <th>NIM / ID MAGANG</th>
                             <th>USERNAME</th>
                             <th>EMAIL</th>
                             <th>NO. HP</th>
@@ -223,7 +219,7 @@ const EmployeeData = () => {
                     <tbody>
                         {loading ? (
                             <tr>
-                                <td colSpan="8" className="text-center">Memuat...</td>
+                                <td colSpan="7" className="text-center">Memuat...</td>
                             </tr>
                         ) : filteredEmployees.length > 0 ? (
                             filteredEmployees.map((emp) => (
@@ -232,7 +228,6 @@ const EmployeeData = () => {
                                         <div className="avatar">{emp.nama?.charAt(0).toUpperCase()}</div>
                                         <span>{emp.nama}</span>
                                     </td>
-                                    <td>{emp.nim || '-'}</td>
                                     <td>{emp.username}</td>
                                     <td>{emp.email || '-'}</td>
                                     <td>{emp.nohp || '-'}</td>
@@ -260,7 +255,7 @@ const EmployeeData = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="8" className="text-center">Tidak ada data anak magang</td>
+                                <td colSpan="7" className="text-center">Tidak ada data anak magang</td>
                             </tr>
                         )}
                     </tbody>
@@ -286,27 +281,15 @@ const EmployeeData = () => {
                             </button>
                         </div>
                         <form className="modal-form" onSubmit={handleSubmit}>
-                            <div className="form-row">
-                                <div className="form-group">
-                                    <label>Nama Lengkap *</label>
-                                    <input 
-                                        type="text" 
-                                        name="nama"
-                                        placeholder="Nama mahasiswa"
-                                        value={formData.nama}
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label>NIM / ID Magang</label>
-                                    <input 
-                                        type="text" 
-                                        name="nim"
-                                        placeholder="MAG-2026-735"
-                                        value={formData.nim}
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
+                            <div className="form-group">
+                                <label>Nama Lengkap *</label>
+                                <input 
+                                    type="text" 
+                                    name="nama"
+                                    placeholder="Nama mahasiswa"
+                                    value={formData.nama}
+                                    onChange={handleInputChange}
+                                />
                             </div>
 
                             <div className="form-group">
