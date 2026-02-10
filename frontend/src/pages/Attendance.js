@@ -157,6 +157,7 @@ const Attendance = () => {
         <div className="attendance-container">
             {/* Check-in Section */}
             <div className="checkin-section">
+                
                 <h2>Check-in Kehadiran</h2>
 
                 {/* Status Today Card */}

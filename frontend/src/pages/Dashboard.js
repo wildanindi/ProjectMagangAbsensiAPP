@@ -148,7 +148,7 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard">
-            <h1>HALO, {user?.nama}</h1>
+            <h1>Absensi Magang</h1>
 
             {/* Top Section: Time, Status, and Check-In */}
             <div className="top-section">
