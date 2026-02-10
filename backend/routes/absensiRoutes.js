@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const absensiController = require('../controllers/absensiController');
 const { verifyToken, isAdmin, isUser } = require('../middleware/auth');
+const { handleUpload } = require('../middleware/upload');
 
 // User routes
-router.post('/check-in', verifyToken, isUser, absensiController.checkIn);
+router.post('/check-in', verifyToken, isUser, handleUpload, absensiController.checkIn);
 router.get('/today', verifyToken, isUser, absensiController.getAttendanceToday);
 router.get('/history', verifyToken, isUser, absensiController.getAttendanceHistory);
 router.get('/date-range', verifyToken, isUser, absensiController.getAttendanceByDateRange);
