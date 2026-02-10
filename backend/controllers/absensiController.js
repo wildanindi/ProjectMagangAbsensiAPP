@@ -1,18 +1,18 @@
 const absensiModel = require('../models/absensiModel');
 const userModel = require('../models/userModel');
 const dayjs = require('dayjs');
+const path = require('path');
 
 // Check-in (Absensi masuk)
 const checkIn = async (req, res) => {
     try {
         const userId = req.user.id;
-        const { foto_base64 } = req.body;
 
-        // Validate input
-        if (!foto_base64) {
+        // Validate photo upload
+        if (!req.file) {
             return res.status(400).json({
                 success: false,
-                message: 'Foto harus diisi'
+                message: 'Foto harus diupload sebagai bukti absensi'
             });
         }
 
@@ -40,8 +40,8 @@ const checkIn = async (req, res) => {
             status = 'TELAT';
         }
 
-        // Save photo as base64 (stored in DB)
-        const fotoPath = foto_base64; // We'll store base64 directly
+        // Save photo path (relative path for serving)
+        const fotoPath = `/uploads/absensi/${req.file.filename}`;
 
         // Create attendance record
         const attendanceData = {
