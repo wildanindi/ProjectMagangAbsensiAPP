@@ -41,8 +41,8 @@ export const izinAPI = {
         return response.data;
     },
 
-    rejectLeaveRequest: async (id) => {
-        const response = await apiClient.put(`/izin/admin/${id}/reject`);
+    rejectLeaveRequest: async (id, keterangan = '') => {
+        const response = await apiClient.put(`/izin/admin/${id}/reject`, { keterangan });
         return response.data;
     },
 

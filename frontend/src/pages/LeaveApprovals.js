@@ -47,18 +47,26 @@ const LeaveApprovals = () => {
 
     const handleReject = async (id) => {
         try {
-            const result = await Swal.fire({
-                title: 'Tolak Pengajuan?',
-                text: 'Apakah Anda yakin ingin menolak pengajuan izin ini?',
-                icon: 'warning',
+            const { value: keterangan } = await Swal.fire({
+                title: 'Tolak Pengajuan?'
+                ,input: 'textarea',
+                inputLabel: 'Keterangan penolakan (opsional)',
+                inputPlaceholder: 'Masukkan alasan atau catatan penolakan...',
+                inputAttributes: {
+                    'aria-label': 'Keterangan penolakan'
+                },
                 showCancelButton: true,
-                confirmButtonText: 'Ya, Tolak',
+                confirmButtonText: 'Tolak',
                 cancelButtonText: 'Batal',
                 confirmButtonColor: '#ef4444'
             });
 
-            if (result.isConfirmed) {
-                await izinAPI.rejectLeaveRequest(id);
+            if (keterangan !== undefined) {
+                // If user pressed confirm, keterangan will be the textarea value (can be empty string)
+                // If user pressed cancel, keterangan will be undefined
+                if (keterangan === null) return; // safeguard
+
+                await izinAPI.rejectLeaveRequest(id, keterangan);
                 Swal.fire('Sukses', 'Pengajuan izin telah ditolak', 'success');
                 fetchLeaveRequests();
             }
