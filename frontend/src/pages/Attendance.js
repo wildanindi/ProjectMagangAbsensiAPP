@@ -226,23 +226,14 @@ const Attendance = () => {
                             </div>
                         ) : (
                             <div className="camera-options">
-                                <button
-                                    className="btn-camera-large"
-                                    onClick={startCamera}
-                                    disabled={checkInLoading}
-                                >
-                                    <Camera size={40} />
-                                    <span>Ambil Foto Kamera</span>
-                                </button>
-
-                                <input
-                                    ref={fileInputRef}
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={uploadPhoto}
-                                    style={{ display: 'none' }}
-                                />
-                            </div>
+                                    <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={uploadPhoto}
+                                        style={{ display: 'none' }}
+                                    />
+                                </div>
                         )}
                     </>
                 ) : (
