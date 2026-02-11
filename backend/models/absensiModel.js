@@ -178,6 +178,75 @@ const updateAttendance = async (id, attendanceData) => {
     }
 };
 
+// Get active users who haven't checked in today and have no approved leave
+const getActiveUsersWithoutAttendance = async () => {
+    try {
+        const query = `SELECT u.id, u.nama, u.email, u.username
+                    FROM users u
+                    LEFT JOIN periode_magang p ON u.periode_id = p.id
+                    WHERE u.role = 'USER'
+                    AND (
+                        p.id IS NULL 
+                        OR CURDATE() BETWEEN p.tanggal_mulai AND p.tanggal_selesai
+                    )
+                    AND u.id NOT IN (
+                        SELECT user_id FROM absensi WHERE tanggal = CURDATE()
+                    )
+                    AND u.id NOT IN (
+                        SELECT user_id FROM izin 
+                        WHERE status = 'APPROVED' 
+                        AND CURDATE() BETWEEN tanggal_mulai AND tanggal_selesai
+                    )`;
+        
+        const [rows] = await db.query(query);
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Create alpha record for a user who didn't check in
+const createAlphaRecord = async (userId, tanggal) => {
+    try {
+        const query = `INSERT INTO absensi 
+                        (user_id, tanggal, jam_masuk, status, foto_path)
+                    VALUES (?, ?, NULL, 'ALPHA', NULL)
+                    ON DUPLICATE KEY UPDATE status = status`;
+        
+        const [result] = await db.query(query, [userId, tanggal]);
+        return { id: result.insertId, user_id: userId, tanggal, status: 'ALPHA' };
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Bulk create alpha records for all users who didn't check in
+const bulkCreateAlphaRecords = async () => {
+    try {
+        const usersWithoutAttendance = await getActiveUsersWithoutAttendance();
+        
+        if (usersWithoutAttendance.length === 0) {
+            return { count: 0, users: [] };
+        }
+
+        const today = new Date().toISOString().split('T')[0];
+        const results = [];
+
+        for (const user of usersWithoutAttendance) {
+            try {
+                const record = await createAlphaRecord(user.id, today);
+                results.push({ ...record, nama: user.nama });
+            } catch (err) {
+                console.error(`Gagal membuat record alpha untuk user ${user.nama} (ID: ${user.id}):`, err.message);
+            }
+        }
+
+        return { count: results.length, users: results };
+    } catch (error) {
+        throw error;
+    }
+};
+
 // Delete attendance record
 const deleteAttendance = async (id) => {
     try {
@@ -202,5 +271,8 @@ module.exports = {
     getUsersWithTodayAttendance,
     getUserAttendanceStats,
     updateAttendance,
-    deleteAttendance
+    deleteAttendance,
+    getActiveUsersWithoutAttendance,
+    createAlphaRecord,
+    bulkCreateAlphaRecords
 };

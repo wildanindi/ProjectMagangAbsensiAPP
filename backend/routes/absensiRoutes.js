@@ -16,5 +16,6 @@ router.get('/admin/all', verifyToken, isAdmin, absensiController.getAllAttendanc
 router.get('/admin/summary-today', verifyToken, isAdmin, absensiController.getAttendanceSummaryToday);
 router.get('/admin/users-today', verifyToken, isAdmin, absensiController.getUsersWithTodayAttendance);
 router.get('/admin/user/:userId', verifyToken, isAdmin, absensiController.getUserAttendanceDetail);
+router.post('/admin/process-alpha', verifyToken, isAdmin, absensiController.processAutoAlpha);
 
 module.exports = router;

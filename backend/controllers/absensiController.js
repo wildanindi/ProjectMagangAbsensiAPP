@@ -1,5 +1,6 @@
 const absensiModel = require('../models/absensiModel');
 const userModel = require('../models/userModel');
+const { processAlpha } = require('../scheduler/alphaScheduler');
 const dayjs = require('dayjs');
 const path = require('path');
 
@@ -269,6 +270,32 @@ const getUserAttendanceDetail = async (req, res) => {
     }
 };
 
+// Process auto-alpha manually (Admin)
+const processAutoAlpha = async (req, res) => {
+    try {
+        const result = await processAlpha();
+
+        if (!result) {
+            return res.status(409).json({
+                success: false,
+                message: 'Proses alpha sedang berjalan, coba lagi nanti'
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: `${result.count} user ditandai ALPHA`,
+            data: result
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
 module.exports = {
     checkIn,
     getAttendanceToday,
@@ -278,5 +305,6 @@ module.exports = {
     getAllAttendance,
     getAttendanceSummaryToday,
     getUsersWithTodayAttendance,
-    getUserAttendanceDetail
+    getUserAttendanceDetail,
+    processAutoAlpha
 };

@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const db = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
+const { startAlphaScheduler } = require('./scheduler/alphaScheduler');
 
 // Routesss
 const authRoutes = require('./routes/authRoutes');
@@ -60,6 +61,9 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
     console.log(`✓ Server berjalan di http://localhost:${PORT}`);
+    
+    // Start alpha scheduler (auto-mark ALPHA setiap jam 12:00 WIB)
+    startAlphaScheduler();
 });
 
 // Handle unhandled promise rejections

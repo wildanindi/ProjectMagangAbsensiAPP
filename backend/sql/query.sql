@@ -59,9 +59,9 @@ CREATE TABLE absensi (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
   tanggal DATE NOT NULL,
-  jam_masuk TIME NOT NULL,
+  jam_masuk TIME NULL,
   status ENUM('HADIR','TELAT','ALPHA') NOT NULL,
-  foto_path VARCHAR(255) NOT NULL,
+  foto_path VARCHAR(255) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   FOREIGN KEY (user_id) REFERENCES users(id)
@@ -69,6 +69,13 @@ CREATE TABLE absensi (
 
   UNIQUE (user_id, tanggal)
 );
+
+/* ================================
+   ALTER TABLE (jalankan jika tabel sudah ada)
+   Mengizinkan jam_masuk dan foto_path NULL untuk record ALPHA
+================================ */
+-- ALTER TABLE absensi MODIFY COLUMN jam_masuk TIME NULL;
+-- ALTER TABLE absensi MODIFY COLUMN foto_path VARCHAR(255) NULL;
 
 /* ================================
    TABEL IZIN / CUTI
