@@ -20,8 +20,8 @@
     right: 0;
     bottom: 0;
     background: 
-        radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
+        radial-gradient(circle at 20% 50%, rgba(2, 182, 209, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(2, 182, 209, 0.06) 0%, transparent 50%);
     pointer-events: none;
 }
 
@@ -58,14 +58,14 @@
     height: 90px;
     margin: 0 auto 24px;
     border-radius: 24px;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    background: linear-gradient(135deg, #02B6D1, #1A599E);
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 48px;
     font-weight: 800;
-    box-shadow: 0 12px 35px rgba(59, 130, 246, 0.25);
+    box-shadow: 0 12px 35px rgba(2, 182, 209, 0.25);
 }
 
 .login-header h1 {
@@ -116,9 +116,9 @@
 }
 
 .input-wrapper:focus-within {
-    border-color: #3b82f6;
+    border-color: #02B6D1;
     background: #f0f4ff;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 0 4px rgba(2, 182, 209, 0.1);
 }
 
 .input-icon {
@@ -164,7 +164,7 @@
 }
 
 .toggle-password:hover:not(:disabled) {
-    color: #3b82f6;
+    color: #02B6D1;
 }
 
 .toggle-password:disabled {
@@ -191,7 +191,7 @@
     width: 18px;
     height: 18px;
     cursor: pointer;
-    accent-color: #3b82f6;
+    accent-color: #02B6D1;
 }
 
 .checkbox-group label {
@@ -203,7 +203,7 @@
 }
 
 .forgot-password {
-    color: #3b82f6;
+    color: #02B6D1;
     text-decoration: none;
     font-size: 14px;
     font-weight: 700;
@@ -212,14 +212,14 @@
 }
 
 .forgot-password:hover {
-    color: #2563eb;
+    color: #1A599E;
     text-decoration: underline;
 }
 
 .login-btn {
     margin-top: 12px;
     padding: 16px 24px;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    background: linear-gradient(135deg, #02B6D1, #1A599E);
     color: white;
     border: none;
     border-radius: 12px;
@@ -266,14 +266,14 @@
 }
 
 .login-signup a {
-    color: #3b82f6;
+    color: #02B6D1;
     text-decoration: none;
     font-weight: 700;
     transition: all 0.3s ease;
 }
 
 .login-signup a:hover {
-    color: #2563eb;
+    color: #1A599E;
     text-decoration: underline;
 }
 
@@ -312,13 +312,13 @@
 }
 
 .demo-account:hover {
-    border-color: #3b82f6;
+    border-color: #02B6D1;
     background: #f0f4ff;
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
 }
 
 .demo-account.intern {
-    border-left: 3px solid #3b82f6;
+    border-left: 3px solid #02B6D1;
 }
 
 .demo-account.mentor {
@@ -407,3 +407,4 @@
         font-size: 14px;
     }
 }
+

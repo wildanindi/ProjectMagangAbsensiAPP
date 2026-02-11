@@ -62,10 +62,12 @@
 
     .nav-link.active {
         border-left: none;
-        border-bottom-color: #3b82f6;
+        border-bottom-color: #02B6D1;
     }
 
     .sidebar-footer {
         display: none;
     }
 }
+
+
