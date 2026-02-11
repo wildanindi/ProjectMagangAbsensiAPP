@@ -41,7 +41,7 @@ function App() {
             <Route path="/admin/leave-approvals" element={<ProtectedRoute requiredRole="ADMIN"><LeaveApprovals /></ProtectedRoute>} />
           </Route>
 
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </AuthProvider>
