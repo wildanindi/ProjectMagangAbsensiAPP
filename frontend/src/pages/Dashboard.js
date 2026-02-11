@@ -261,25 +261,39 @@ const Dashboard = () => {
                     <div className="loading">Memuat...</div>
                 ) : recentActivities.length > 0 ? (
                     <div className="activities-list">
-                        {recentActivities.map((activity) => (
-                            <div key={activity.id} className="activity-item">
-                                <div className="activity-date">
-                                    <Clock size={18} />
-                                    <span>{activity.tanggal}</span>
-                                </div>
-                                <div className="activity-times">
-                                    <div>
-                                        <span className="time-label">Masuk:</span>
-                                        <span className="time-value">{activity.jam_masuk || '-'}</span>
+                        {recentActivities.map((activity) => {
+                            const activityDate = new Date(activity.tanggal);
+                            const formattedDate = activityDate.toLocaleDateString('id-ID', {
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            });
+                            const timeDisplay = activity.jam_masuk || '-';
+
+                            return (
+                                <div key={activity.id} className="activity-item">
+                                    <div className="activity-info">
+                                        <div className="activity-date-section">
+                                            <Clock size={20} className="activity-icon" />
+                                            <div>
+                                                <div className="activity-date-label">Tanggal</div>
+                                                <div className="activity-date-value">{formattedDate}</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <span className="time-label">Keluar:</span>
-                                        <span className="time-value">{activity.jam_keluar || '-'}</span>
+                                    <div className="activity-time-section">
+                                        <div className="activity-time-item">
+                                            <div className="time-label">Jam Masuk</div>
+                                            <div className="time-value-large">{timeDisplay}</div>
+                                        </div>
+                                    </div>
+                                    <div className="activity-status-section">
+                                        {getStatusBadge(activity.status)}
                                     </div>
                                 </div>
-                                {getStatusBadge(activity.status)}
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 ) : (
                     <div className="no-activities">Belum ada aktivitas</div>
