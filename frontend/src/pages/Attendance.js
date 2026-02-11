@@ -201,7 +201,7 @@ const Attendance = () => {
                                 {checkInStatus?.jam_masuk ? (
                                     <>
                                         <div className="time-item">
-                                            <span className="time-label">Jam Masuk</span>
+                                            <span className="time-label1">Jam Masuk</span>
                                             <span className="time-value">{checkInStatus.jam_masuk}</span>
                                         </div>
                                         {checkInStatus?.jam_keluar && (
