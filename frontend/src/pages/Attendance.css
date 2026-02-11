@@ -73,11 +73,13 @@
     opacity: 0.8;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    color: white;
 }
 
 .time-value {
     font-size: 24px;
     font-weight: 700;
+    color: white;
 }
 
 .status-message {
