@@ -208,6 +208,15 @@ const Profile = () => {
                                         <span className="detail-value">{user?.id}</span>
                                     </div>
                                 </div>
+                                
+                                <div className="detail-row">
+                                    <span className="detail-icon"><User /></span>
+                                    <div className="detail-content">
+                                        <span className="detail-label">Nama Lengkap</span>
+                                        <span className="detail-value">{user?.nama}</span>
+                                    </div>
+                                </div>
+
                                 <div className="detail-row">
                                     <span className="detail-icon"><User /></span>
                                     <div className="detail-content">
