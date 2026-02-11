@@ -3,14 +3,15 @@ const db = require('../config/db');
 // Create leave request (Pengajuan Izin)
 const createLeaveRequest = async (leaveData) => {
     try {
-        const { user_id, tanggal_mulai, tanggal_selesai, alasan } = leaveData;
+        const { user_id, jenis_izin, tanggal_mulai, tanggal_selesai, alasan } = leaveData;
         
         const query = `INSERT INTO izin 
-                        (user_id, tanggal_mulai, tanggal_selesai, alasan, status)
-                    VALUES (?, ?, ?, ?, 'PENDING')`;
+                        (user_id, jenis_izin, tanggal_mulai, tanggal_selesai, alasan, status)
+                    VALUES (?, ?, ?, ?, ?, 'PENDING')`;
         
         const [result] = await db.query(query, [
             user_id, 
+            jenis_izin || 'CUTI',
             tanggal_mulai, 
             tanggal_selesai, 
             alasan

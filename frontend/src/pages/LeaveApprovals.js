@@ -75,6 +75,16 @@ const LeaveApprovals = () => {
         }
     };
 
+    const formatDate = (dateStr) => {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('id-ID', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+    };
+
     const getStatusBadge = (status) => {
         const statusMap = {
             'PENDING': { label: 'Menunggu', className: 'badge-warning' },
@@ -137,7 +147,7 @@ const LeaveApprovals = () => {
                             </div>
 
                             <div className="approval-dates">
-                                <span><Calendar size={20} /> {request.tanggal_mulai} s/d {request.tanggal_selesai}</span>
+                                <span><Calendar size={20} /> {formatDate(request.tanggal_mulai)} s/d {formatDate(request.tanggal_selesai)}</span>
                             </div>
 
                             <div className="approval-reason">

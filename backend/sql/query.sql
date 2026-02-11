@@ -76,6 +76,7 @@ CREATE TABLE absensi (
 CREATE TABLE izin (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
+  jenis_izin ENUM('SAKIT','CUTI','IZIN_KHUSUS') NOT NULL DEFAULT 'CUTI',
   tanggal_mulai DATE NOT NULL,
   tanggal_selesai DATE NOT NULL,
   alasan TEXT,

@@ -5,7 +5,7 @@ const userModel = require('../models/userModel');
 const createLeaveRequest = async (req, res) => {
     try {
         const userId = req.user.id;
-        const { tanggal_mulai, tanggal_selesai, alasan } = req.body;
+        const { jenis_izin, tanggal_mulai, tanggal_selesai, alasan } = req.body;
 
         // Validate input
         if (!tanggal_mulai || !tanggal_selesai) {
@@ -18,6 +18,7 @@ const createLeaveRequest = async (req, res) => {
         // Create leave request
         const leaveData = {
             user_id: userId,
+            jenis_izin: jenis_izin || 'CUTI',
             tanggal_mulai,
             tanggal_selesai,
             alasan: alasan || ''
