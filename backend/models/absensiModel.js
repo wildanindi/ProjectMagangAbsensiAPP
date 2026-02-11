@@ -104,14 +104,15 @@ const getAttendanceSummaryToday = async () => {
                         COUNT(CASE WHEN status = 'HADIR' THEN 1 END) as hadir,
                         COUNT(CASE WHEN status = 'TELAT' THEN 1 END) as telat,
                         COUNT(CASE WHEN status = 'ALPHA' THEN 1 END) as alpha,
-                        COUNT(*) as total_record
+                        COUNT(*) as total_record,
+                        (SELECT COUNT(*) FROM izin WHERE status = 'APPROVED' AND CURDATE() BETWEEN tanggal_mulai AND tanggal_selesai) as izin
                     FROM absensi 
                     WHERE tanggal = CURDATE() AND user_id IN (
                         SELECT id FROM users WHERE role = 'USER'
                     )`;
         
         const [rows] = await db.query(query);
-        return rows[0] || { hadir: 0, telat: 0, alpha: 0, total_record: 0 };
+        return rows[0] || { hadir: 0, telat: 0, alpha: 0, izin: 0, total_record: 0 };
     } catch (error) {
         throw error;
     }
@@ -147,14 +148,15 @@ const getUsersWithTodayAttendance = async () => {
 const getUserAttendanceStats = async (userId) => {
     try {
         const query = `SELECT 
-                        COUNT(CASE WHEN status = 'HADIR' THEN 1 END) as hadir,
-                        COUNT(CASE WHEN status = 'TELAT' THEN 1 END) as telat,
-                        COUNT(CASE WHEN status = 'ALPHA' THEN 1 END) as alpha,
-                        COUNT(*) as total
-                    FROM absensi
-                    WHERE user_id = ?`;
+                        COUNT(CASE WHEN a.status = 'HADIR' THEN 1 END) as hadir,
+                        COUNT(CASE WHEN a.status = 'TELAT' THEN 1 END) as telat,
+                        COUNT(CASE WHEN a.status = 'ALPHA' THEN 1 END) as alpha,
+                        COUNT(*) as total,
+                        (SELECT COUNT(*) FROM izin WHERE user_id = ? AND status = 'APPROVED') as izin
+                    FROM absensi a
+                    WHERE a.user_id = ?`;
         
-        const [rows] = await db.query(query, [userId]);
+        const [rows] = await db.query(query, [userId, userId]);
         return rows[0];
     } catch (error) {
         throw error;

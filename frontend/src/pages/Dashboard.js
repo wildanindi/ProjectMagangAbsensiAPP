@@ -137,6 +137,7 @@ const Dashboard = () => {
     const getStatusBadge = (status) => {
         const statusMap = {
             'HADIR': { label: 'Hadir', className: 'badge-success' },
+            'TELAT': { label: 'Terlambat', className: 'badge-warning' },
             'TERLAMBAT': { label: 'Terlambat', className: 'badge-warning' },
             'IZIN': { label: 'Izin', className: 'badge-info' },
             'SAKIT': { label: 'Sakit', className: 'badge-danger' },
@@ -231,7 +232,7 @@ const Dashboard = () => {
                     </div>
                     <div className="stat-card">
                         <div className="stat-value" style={{ color: '#f59e0b' }}>
-                            {attendanceSummary.terlambat || 0}
+                            {attendanceSummary.telat || 0}
                         </div>
                         <div className="stat-label">TERLAMBAT</div>
                     </div>

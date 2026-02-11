@@ -32,11 +32,11 @@ const checkIn = async (req, res) => {
         const tanggal = now.format('YYYY-MM-DD');
 
         // Check time (08:00 is the standard check-in time)
-        const checkInTime = dayjs(jamMasuk, 'HH:mm:ss');
-        const standardTime = dayjs('08:00:00', 'HH:mm:ss');
+        // Compare using startOf('day') to avoid customParseFormat dependency
+        const standardTime = now.startOf('day').add(8, 'hour');
 
         let status = 'HADIR';
-        if (checkInTime.isAfter(standardTime)) {
+        if (now.isAfter(standardTime)) {
             status = 'TELAT';
         }
 

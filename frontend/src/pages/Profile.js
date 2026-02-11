@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { usersAPI } from '../api/users';
 import Swal from 'sweetalert2';
-import { Edit2, Key, X } from 'lucide-react';
+import { Edit2, Key, Mail, University, X, PhoneCall, User, Hash } from 'lucide-react';
 import './Profile.css';
 
 const Profile = () => {
@@ -202,14 +202,14 @@ const Profile = () => {
                         <div className="detail-section">
                             <h2>INFORMASI PESERTA</h2>
                                 <div className="detail-row">
-                                    <span className="detail-icon">🆔</span>
+                                    <span className="detail-icon"><Hash /></span>
                                     <div className="detail-content">
                                         <span className="detail-label">ID Karyawan</span>
                                         <span className="detail-value">{user?.id}</span>
                                     </div>
                                 </div>
                                 <div className="detail-row">
-                                    <span className="detail-icon">👤</span>
+                                    <span className="detail-icon"><User /></span>
                                     <div className="detail-content">
                                         <span className="detail-label">Username</span>
                                         <span className="detail-value">{user?.username}</span>
@@ -221,21 +221,21 @@ const Profile = () => {
                         <div className="detail-section">
                             <h2>DATA PRIBADI</h2>
                             <div className="detail-row">
-                                <span className="detail-icon">🏫</span>
+                                <span className="detail-icon"><University /></span>
                                 <div className="detail-content">
                                     <span className="detail-label">Asal Kampus / Sekolah</span>
                                     <span className="detail-value">{user?.asal_studi || '-'}</span>
                                 </div>
                             </div>
                             <div className="detail-row">
-                                <span className="detail-icon">✉️</span>
+                                <span className="detail-icon"><Mail /></span>
                                 <div className="detail-content">
-                                    <span className="detail-label">Email Pribadi / Kampus</span>
-                                    <span className="detail-value">{user?.email || 'student@university.ac.id'}</span>
+                                    <span className="detail-label">Email Pribadi</span>
+                                    <span className="detail-value">{user?.email || 'name@example.com'}</span>
                                 </div>
                             </div>
                             <div className="detail-row">
-                                <span className="detail-icon">📱</span>
+                                <span className="detail-icon"><PhoneCall /></span>
                                 <div className="detail-content">
                                     <span className="detail-label">Nomor Telepon / WhatsApp</span>
                                     <span className="detail-value">{user?.nohp || '-'}</span>
