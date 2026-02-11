@@ -21,6 +21,7 @@ const Attendance = () => {
     const [attendanceData, setAttendanceData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filterMonth, setFilterMonth] = useState(new Date().toISOString().slice(0, 7));
+    const [filterDate, setFilterDate] = useState('');
 
     useEffect(() => {
         fetchAttendanceHistory();
@@ -153,6 +154,29 @@ const Attendance = () => {
         alert('Fitur export akan segera tersedia');
     };
 
+    // derive displayed data based on month/date filters
+    // NOTE: use local date parts to avoid UTC offset issues (toISOString shifts date)
+    const displayedData = (attendanceData || []).filter((record) => {
+        if (!record || !record.tanggal) return false;
+
+        const dt = new Date(record.tanggal);
+        const y = dt.getFullYear();
+        const m = String(dt.getMonth() + 1).padStart(2, '0');
+        const d = String(dt.getDate()).padStart(2, '0');
+        const recDateLocal = `${y}-${m}-${d}`; // YYYY-MM-DD local
+        const recMonthLocal = `${y}-${m}`; // YYYY-MM
+
+        if (filterDate) {
+            return recDateLocal === filterDate;
+        }
+
+        if (filterMonth) {
+            return recMonthLocal === filterMonth;
+        }
+
+        return true;
+    });
+
     return (
         <div className="attendance-container">
             {/* Check-in Section */}
@@ -278,6 +302,13 @@ const Attendance = () => {
                                 return <option key={value} value={value}>{label}</option>;
                             })}
                         </select>
+                        <input
+                            type="date"
+                            value={filterDate}
+                            onChange={(e) => setFilterDate(e.target.value)}
+                            className="date-filter"
+                            title="Filter per tanggal"
+                        />
                         <button onClick={handleExport} className="export-btn">
                             <Download size={18} />
                             <span>Export</span>
@@ -285,28 +316,28 @@ const Attendance = () => {
                     </div>
                 </div>
 
-                <div className="attendance-stats">
+                    <div className="attendance-stats">
                     <div className="stat-box">
-                        <div className="stat-number">{attendanceData.filter(a => a.status === 'HADIR').length}</div>
+                        <div className="stat-number">{displayedData.filter(a => a.status === 'HADIR').length}</div>
                         <div className="stat-text">Tepat Waktu</div>
                     </div>
                     <div className="stat-box">
-                        <div className="stat-number">{attendanceData.filter(a => a.status === 'TELAT' || a.status === 'TERLAMBAT').length}</div>
+                        <div className="stat-number">{displayedData.filter(a => a.status === 'TELAT' || a.status === 'TERLAMBAT').length}</div>
                         <div className="stat-text">Terlambat</div>
                     </div>
                     <div className="stat-box">
-                        <div className="stat-number">{attendanceData.filter(a => a.status === 'IZIN').length}</div>
+                        <div className="stat-number">{displayedData.filter(a => a.status === 'IZIN').length}</div>
                         <div className="stat-text">Izin</div>
                     </div>
                     <div className="stat-box">
-                        <div className="stat-number">{attendanceData.filter(a => a.status === 'ALPHA').length}</div>
+                        <div className="stat-number">{displayedData.filter(a => a.status === 'ALPHA').length}</div>
                         <div className="stat-text">Alpha</div>
                     </div>
                 </div>
 
                 {loading ? (
                     <div className="loading">Memuat riwayat...</div>
-                ) : attendanceData.length > 0 ? (
+                ) : displayedData.length > 0 ? (
                     <div className="attendance-table-wrapper">
                         <table className="attendance-table">
                             <thead>
@@ -318,7 +349,7 @@ const Attendance = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {attendanceData.map((record) => (
+                                {displayedData.map((record) => (
                                     <tr key={record.id}>
                                         <td>{new Date(record.tanggal).toLocaleDateString('id-ID', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' })}</td>
                                         <td>{record.jam_masuk || '-'}</td>
