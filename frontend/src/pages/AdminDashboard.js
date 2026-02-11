@@ -76,6 +76,30 @@ const AdminDashboard = () => {
         }
     };
 
+    const showPhoto = (photoUrl, name) => {
+        if (!photoUrl) return;
+        Swal.fire({
+            title: `${name} — Foto Check-in`,
+            imageUrl: photoUrl,
+            imageAlt: 'Foto check-in',
+            imageWidth: 600,
+            showCloseButton: true,
+            showConfirmButton: false,
+        });
+    };
+
+    const resolvePhotoUrl = (path) => {
+        if (!path) return null;
+        // if already absolute URL (http:// or https://), use as-is
+        if (/^https?:\/\//i.test(path)) return path;
+        // path from backend is typically /uploads/absensi/<filename>
+        // construct full URL: http://localhost:5000/uploads/absensi/<filename>
+        const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+        const SERVER_BASE = API_BASE.replace(/\/api\/?$/, ''); // http://localhost:5000
+        const p = path.startsWith('/') ? path : `/${path}`; // ensure leading /
+        return `${SERVER_BASE}${p}`;
+    };
+
     return (
         <div className="admin-dashboard">
             <h1>Dashboard Admin</h1>
@@ -171,31 +195,54 @@ const AdminDashboard = () => {
                     {loading ? (
                         <div className="loading">Memuat data...</div>
                     ) : usersData.length > 0 ? (
-                        <div className="attendance-list">
-                            {usersData.map((user) => (
-                                <div key={user.id} className="attendance-item">
-                                    <div className="user-info">
-                                        <div className="user-avatar">
-                                            {user.nama.charAt(0).toUpperCase()}
-                                        </div>
-                                        <div className="user-details">
-                                            <div className="user-name">{user.nama}</div>
-                                            <div className="user-email">{user.email || 'N/A'}</div>
-                                        </div>
-                                    </div>
-                                    <div className="status-badge" style={{ 
-                                        backgroundColor: getStatusColor(user.status_hari_ini),
-                                        color: '#fff'
-                                    }}>
-                                        {getStatusLabel(user.status_hari_ini)}
-                                    </div>
-                                    {user.jam_masuk_hari_ini && (
-                                        <div className="check-time">
-                                            {user.jam_masuk_hari_ini}
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
+                        <div className="attendance-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>FOTO</th>
+                                        <th>NAMA</th>
+                                        <th>USERNAME</th>
+                                        <th>EMAIL</th>
+                                        <th>STATUS</th>
+                                        <th>JAM MASUK</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {usersData.map((user) => {
+                                        // use foto_path from database as the canonical photo field
+                                        const photoUrlRaw = user.foto_path || null;
+                                        const photoUrl = resolvePhotoUrl(photoUrlRaw);
+                                        return (
+                                            <tr key={user.id}>
+                                                <td className="photo-cell">
+                                                    <div className="user-photo" onClick={() => photoUrl && showPhoto(photoUrl, user.nama)} title={photoUrl ? 'Klik untuk lihat foto' : 'Belum ada foto'}>
+                                                        {photoUrl ? (
+                                                            <img src={photoUrl} alt={`${user.nama} photo`} />
+                                                        ) : (
+                                                            <div className="user-avatar">{user.nama.charAt(0).toUpperCase()}</div>
+                                                        )}
+                                                    </div>
+                                                </td>
+                                                <td className="user-name-cell">{user.nama}</td>
+                                                <td>{user.username || '-'}</td>
+                                                <td>{user.email || '-'}</td>
+                                                
+                                                <td>
+                                                    <span className="status-badge" style={{ 
+                                                        backgroundColor: getStatusColor(user.status_hari_ini),
+                                                        color: '#fff'
+                                                    }}>
+                                                        {getStatusLabel(user.status_hari_ini)}
+                                                    </span>
+                                                </td>
+                                                <td className="jam-masuk">
+                                                    {user.jam_masuk_hari_ini || '-'}
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
                         </div>
                     ) : (
                         <div className="empty-state">

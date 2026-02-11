@@ -188,35 +188,92 @@
     grid-column: 1 / -1;
 }
 
-.attendance-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    max-height: 500px;
-    overflow-y: auto;
+.attendance-table {
+    overflow-x: auto;
 }
 
-.attendance-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 16px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    border-left: 4px solid #3b82f6;
+.attendance-table table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.user-info {
+.attendance-table thead {
+    background: #f5f5f5;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.attendance-table th {
+    padding: 14px 12px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.attendance-table tbody tr {
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
+}
+
+.attendance-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.attendance-table td {
+    padding: 12px;
+    font-size: 14px;
+    color: #333;
+}
+
+.attendance-table .photo-cell {
+    padding: 8px 12px;
+}
+
+.attendance-table .user-name-cell {
+    font-weight: 600;
+}
+
+.attendance-table .user-photo {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    overflow: hidden;
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex: 1;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid #e0e0e0;
+}
+
+.attendance-table .user-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.attendance-table .status-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+    min-width: 70px;
+    text-align: center;
+}
+
+.attendance-table .jam-masuk {
+    text-align: center;
+    color: #666;
 }
 
 .user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     display: flex;
@@ -224,37 +281,7 @@
     justify-content: center;
     font-weight: 700;
     flex-shrink: 0;
-}
-
-.user-details {
-    flex: 1;
-}
-
-.user-name {
-    font-weight: 600;
-    color: #333;
-    font-size: 14px;
-}
-
-.user-email {
-    font-size: 12px;
-    color: #999;
-}
-
-.status-badge {
-    padding: 4px 12px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    min-width: 80px;
-    text-align: center;
-}
-
-.check-time {
-    font-size: 12px;
-    color: #666;
-    min-width: 60px;
-    text-align: right;
+    font-size: 16px;
 }
 
 .empty-state {
@@ -273,14 +300,23 @@
         grid-template-columns: 1fr;
     }
 
-    .attendance-item {
-        flex-wrap: wrap;
-        gap: 8px;
+    .attendance-table {
+        font-size: 12px;
     }
 
-    .status-badge,
-    .check-time {
-        width: 100%;
-        text-align: left;
+    .attendance-table th,
+    .attendance-table td {
+        padding: 8px 6px;
+    }
+
+    .attendance-table .user-photo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
     }
 }
