@@ -209,8 +209,8 @@ const AdminDashboard = () => {
                                 </thead>
                                 <tbody>
                                     {usersData.map((user) => {
-                                        // use foto_path from database as the canonical photo field
-                                        const photoUrlRaw = user.foto_path || null;
+                                        // use foto_hari_ini from today's attendance query
+                                        const photoUrlRaw = user.foto_hari_ini || null;
                                         const photoUrl = resolvePhotoUrl(photoUrlRaw);
                                         return (
                                             <tr key={user.id}>
