@@ -147,6 +147,27 @@ const Dashboard = () => {
         return <span className={`badge ${statusInfo.className}`}>{statusInfo.label}</span>;
     };
 
+    const hasCheckedInToday = () => {
+        if (!recentActivities || recentActivities.length === 0) {
+            return false;
+        }
+
+        const today = new Date();
+        const todayString = today.getFullYear() + '-' + 
+                           String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+                           String(today.getDate()).padStart(2, '0');
+
+        const todayActivity = recentActivities.find((activity) => {
+            const activityDate = new Date(activity.tanggal);
+            const activityDateString = activityDate.getFullYear() + '-' + 
+                                      String(activityDate.getMonth() + 1).padStart(2, '0') + '-' + 
+                                      String(activityDate.getDate()).padStart(2, '0');
+            return activityDateString === todayString && activity.jam_masuk;
+        });
+
+        return !!todayActivity;
+    };
+
     return (
         <div className="dashboard">
             <h1>Absensi Magang</h1>
@@ -180,14 +201,25 @@ const Dashboard = () => {
                 {/* Status Kehadiran - Middle */}
                 <div className="status-card middle">
                     <div className="status-header">Presensi Magang</div>
-                    <div className="status-message">
-                        Anda sudah melakukan check-in hari ini. Catat aktivitas harian di Log Book sebelum pulang.
-                    </div>
-                    <div className="status-badge">Sedang Magang</div>
-                    <div className="status-time">
-                        <Clock size={16} />
-                        <span>Masuk: {formatTime(currentTime)}</span>
-                    </div>
+                    {hasCheckedInToday() ? (
+                        <>
+                            <div className="status-message">
+                                Anda sudah melakukan Presensi hari ini. Catat aktivitas harian di Log Book sebelum pulang.
+                            </div>
+                            <div className="status-badge">Sedang Magang</div>
+                            <div className="status-time">
+                                <Clock size={16} />
+                                <span>Masuk: {recentActivities[0]?.jam_masuk || formatTime(currentTime)}</span>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className="status-message-pending">
+                                Anda belum melakukan Presensi hari ini. Silakan submit presensi sekarang.
+                            </div>
+                            <div className="status-badge-pending">Belum Absen</div>
+                        </>
+                    )}
                 </div>
 
                 {/* Check-In Button - Right */}
