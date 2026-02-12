@@ -100,31 +100,43 @@ const getAllAttendance = async (limit = 100, offset = 0) => {
 // Get attendance summary for today (Admin)
 const getAttendanceSummaryToday = async () => {
     try {
+        // Hitung user tanpa record & tanpa izin (calon alpha / belum absen)
+        // Hanya dihitung sebagai ALPHA jika sudah lewat jam 12:00
         const query = `SELECT 
                         COALESCE(SUM(CASE WHEN a.status = 'HADIR' THEN 1 ELSE 0 END), 0) as hadir,
                         COALESCE(SUM(CASE WHEN a.status = 'TELAT' THEN 1 ELSE 0 END), 0) as telat,
                         (
                             COALESCE(SUM(CASE WHEN a.status = 'ALPHA' THEN 1 ELSE 0 END), 0)
-                            +
-                            (SELECT COUNT(*) FROM users u 
-                             WHERE u.role = 'USER' 
-                             AND u.id NOT IN (SELECT ab.user_id FROM absensi ab WHERE ab.tanggal = CURDATE())
-                             AND u.id NOT IN (
-                                SELECT iz.user_id FROM izin iz 
-                                WHERE iz.status = 'APPROVED' 
-                                AND CURDATE() BETWEEN iz.tanggal_mulai AND iz.tanggal_selesai
-                             )
-                            )
+                            + IF(CURTIME() >= '12:00:00',
+                                (SELECT COUNT(*) FROM users u2
+                                 WHERE u2.role = 'USER'
+                                 AND u2.id NOT IN (SELECT ab.user_id FROM absensi ab WHERE ab.tanggal = CURDATE())
+                                 AND u2.id NOT IN (
+                                    SELECT iz.user_id FROM izin iz
+                                    WHERE iz.status = 'APPROVED'
+                                    AND CURDATE() BETWEEN iz.tanggal_mulai AND iz.tanggal_selesai
+                                 )
+                                ), 0
+                              )
                         ) as alpha,
                         COUNT(a.id) as total_record,
-                        (SELECT COUNT(*) FROM izin WHERE status = 'APPROVED' AND CURDATE() BETWEEN tanggal_mulai AND tanggal_selesai) as izin
+                        (SELECT COUNT(*) FROM izin WHERE status = 'APPROVED' AND CURDATE() BETWEEN tanggal_mulai AND tanggal_selesai) as izin,
+                        (SELECT COUNT(*) FROM users u3
+                         WHERE u3.role = 'USER'
+                         AND u3.id NOT IN (SELECT ab2.user_id FROM absensi ab2 WHERE ab2.tanggal = CURDATE())
+                         AND u3.id NOT IN (
+                            SELECT iz2.user_id FROM izin iz2
+                            WHERE iz2.status = 'APPROVED'
+                            AND CURDATE() BETWEEN iz2.tanggal_mulai AND iz2.tanggal_selesai
+                         )
+                        ) as belum_absen
                     FROM absensi a
                     WHERE a.tanggal = CURDATE() AND a.user_id IN (
                         SELECT id FROM users WHERE role = 'USER'
                     )`;
         
         const [rows] = await db.query(query);
-        return rows[0] || { hadir: 0, telat: 0, alpha: 0, izin: 0, total_record: 0 };
+        return rows[0] || { hadir: 0, telat: 0, alpha: 0, izin: 0, total_record: 0, belum_absen: 0 };
     } catch (error) {
         throw error;
     }
@@ -133,6 +145,11 @@ const getAttendanceSummaryToday = async () => {
 // Get user list with today's attendance
 const getUsersWithTodayAttendance = async () => {
     try {
+        // Status logic:
+        // - Ada record di DB → pakai status dari DB (HADIR/TELAT/ALPHA)
+        // - Tidak ada record, punya izin approved hari ini → IZIN
+        // - Tidak ada record, sudah lewat jam 12:00 → ALPHA
+        // - Tidak ada record, belum jam 12:00 → BELUM_ABSEN
         const query = `SELECT 
                         u.id,
                         u.nama,
@@ -147,7 +164,8 @@ const getUsersWithTodayAttendance = async () => {
                                 AND i.status = 'APPROVED' 
                                 AND CURDATE() BETWEEN i.tanggal_mulai AND i.tanggal_selesai
                             ) THEN 'IZIN'
-                            ELSE 'ALPHA'
+                            WHEN CURTIME() >= '12:00:00' THEN 'ALPHA'
+                            ELSE 'BELUM_ABSEN'
                         END AS status_hari_ini,
                         a.jam_masuk AS jam_masuk_hari_ini,
                         a.foto_path AS foto_hari_ini

@@ -18,6 +18,18 @@ const checkIn = async (req, res) => {
             });
         }
 
+        // Get current time
+        const now = dayjs();
+
+        // Batas check-in jam 12:00 (setelahnya otomatis ALPHA)
+        const cutoffTime = now.startOf('day').add(12, 'hour');
+        if (now.isAfter(cutoffTime)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Batas waktu check-in sudah lewat (12:00). Anda tercatat ALPHA hari ini.'
+            });
+        }
+
         // Check if user already checked in today
         const existingAttendance = await absensiModel.getUserAttendanceToday(userId);
 
@@ -28,13 +40,10 @@ const checkIn = async (req, res) => {
             });
         }
 
-        // Get current time
-        const now = dayjs();
         const jamMasuk = now.format('HH:mm:ss');
         const tanggal = now.format('YYYY-MM-DD');
 
-        // Check time (08:00 is the standard check-in time)
-        // Compare using startOf('day') to avoid customParseFormat dependency
+        // Jam masuk standar 08:00 — setelahnya dianggap terlambat
         const standardTime = now.startOf('day').add(8, 'hour');
 
         let status = 'HADIR';
@@ -58,7 +67,7 @@ const checkIn = async (req, res) => {
 
         return res.status(201).json({
             success: true,
-            message: `Check-in berhasil dengan status ${status}`,
+            message: `Check-in berhasil dengan status ${status === 'TELAT' ? 'TERLAMBAT' : status}`,
             data: newAttendance
         });
     } catch (error) {
@@ -74,61 +83,54 @@ const checkIn = async (req, res) => {
 const getAttendanceToday = async (req, res) => {
     try {
         const userId = req.user.id;
+        const now = dayjs();
+        const today = now.format('YYYY-MM-DD');
 
+        // Cek record absensi di DB
         const attendance = await absensiModel.getUserAttendanceToday(userId);
 
-        if (!attendance) {
-            // Cek apakah sudah lewat jam cutoff (12:00 WIB)
-            const now = dayjs();
-            const cutoffHour = 12;
-
-            if (now.hour() >= cutoffHour) {
-                // Cek apakah user punya izin yang disetujui hari ini
-                const userLeaves = await izinModel.getUserLeaveRequests(userId, 'APPROVED');
-                const today = now.format('YYYY-MM-DD');
-                const hasApprovedLeave = userLeaves.some(leave => {
-                    return today >= leave.tanggal_mulai.toISOString().split('T')[0] &&
-                           today <= leave.tanggal_selesai.toISOString().split('T')[0];
-                });
-
-                if (hasApprovedLeave) {
-                    return res.status(200).json({
-                        success: true,
-                        message: 'Anda sedang izin hari ini',
-                        data: {
-                            user_id: userId,
-                            tanggal: today,
-                            jam_masuk: null,
-                            status: 'IZIN',
-                            foto_path: null
-                        }
-                    });
-                }
-
-                // Tidak ada izin dan belum absen = ALPHA
-                return res.status(200).json({
-                    success: true,
-                    message: 'Anda ditandai ALPHA hari ini',
-                    data: {
-                        user_id: userId,
-                        tanggal: today,
-                        jam_masuk: null,
-                        status: 'ALPHA',
-                        foto_path: null
-                    }
-                });
-            }
-
+        if (attendance) {
+            // Sudah ada record (HADIR / TELAT / ALPHA dari scheduler)
             return res.status(200).json({
                 success: true,
-                message: 'Anda belum absen hari ini',
-                data: null
+                data: attendance
             });
         }
 
+        // Belum ada record — cek apakah user punya izin approved hari ini
+        const userLeaves = await izinModel.getUserLeaveRequests(userId, 'APPROVED');
+        const hasApprovedLeave = userLeaves.some(leave => {
+            const mulai = leave.tanggal_mulai instanceof Date
+                ? leave.tanggal_mulai.toISOString().split('T')[0]
+                : String(leave.tanggal_mulai).split('T')[0];
+            const selesai = leave.tanggal_selesai instanceof Date
+                ? leave.tanggal_selesai.toISOString().split('T')[0]
+                : String(leave.tanggal_selesai).split('T')[0];
+            return today >= mulai && today <= selesai;
+        });
+
+        if (hasApprovedLeave) {
+            return res.status(200).json({
+                success: true,
+                message: 'Anda sedang izin hari ini',
+                data: { user_id: userId, tanggal: today, jam_masuk: null, status: 'IZIN', foto_path: null }
+            });
+        }
+
+        // Cek apakah sudah lewat jam 12:00
+        if (now.hour() >= 12) {
+            return res.status(200).json({
+                success: true,
+                message: 'Anda tercatat ALPHA hari ini karena tidak melakukan presensi sebelum jam 12:00',
+                data: { user_id: userId, tanggal: today, jam_masuk: null, status: 'ALPHA', foto_path: null }
+            });
+        }
+
+        // Belum jam 12, masih bisa check-in
         return res.status(200).json({
             success: true,
-            data: attendance
+            message: 'Anda belum absen hari ini',
+            data: null
         });
     } catch (error) {
         console.error(error);
@@ -203,6 +205,32 @@ const getAttendanceStats = async (req, res) => {
         const userId = req.user.id;
 
         const stats = await absensiModel.getUserAttendanceStats(userId);
+
+        // Cek apakah hari ini user sudah ALPHA secara virtual
+        // (belum ada record di DB tapi sudah lewat jam 12 & tidak ada izin)
+        const now = dayjs();
+        if (now.hour() >= 12) {
+            const todayRecord = await absensiModel.getUserAttendanceToday(userId);
+            if (!todayRecord) {
+                // Cek apakah punya izin approved hari ini
+                const today = now.format('YYYY-MM-DD');
+                const userLeaves = await izinModel.getUserLeaveRequests(userId, 'APPROVED');
+                const hasApprovedLeave = userLeaves.some(leave => {
+                    const mulai = leave.tanggal_mulai instanceof Date
+                        ? leave.tanggal_mulai.toISOString().split('T')[0]
+                        : String(leave.tanggal_mulai).split('T')[0];
+                    const selesai = leave.tanggal_selesai instanceof Date
+                        ? leave.tanggal_selesai.toISOString().split('T')[0]
+                        : String(leave.tanggal_selesai).split('T')[0];
+                    return today >= mulai && today <= selesai;
+                });
+
+                if (!hasApprovedLeave) {
+                    // Tambah +1 alpha untuk hari ini yang belum ter-record di DB
+                    stats.alpha = (parseInt(stats.alpha) || 0) + 1;
+                }
+            }
+        }
 
         return res.status(200).json({
             success: true,

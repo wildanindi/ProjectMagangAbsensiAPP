@@ -11,7 +11,8 @@ const AdminDashboard = () => {
         presentToday: 0,
         lateToday: 0,
         onLeaveToday: 0,
-        absentToday: 0
+        absentToday: 0,
+        belumAbsen: 0
     });
     const [usersData, setUsersData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -40,19 +41,20 @@ const AdminDashboard = () => {
 
             setUsersData(users);
             
-            // Hitung stats dari users list supaya akurat
-            // (summary query mungkin belum menghitung user tanpa record)
+            // Hitung stats langsung dari data users (paling akurat)
             const hadirCount = users.filter(u => u.status_hari_ini === 'HADIR').length;
             const telatCount = users.filter(u => u.status_hari_ini === 'TELAT').length;
             const alphaCount = users.filter(u => u.status_hari_ini === 'ALPHA').length;
             const izinCount = users.filter(u => u.status_hari_ini === 'IZIN').length;
+            const belumAbsenCount = users.filter(u => u.status_hari_ini === 'BELUM_ABSEN').length;
 
             setStats({
                 totalInterns: interns.length,
-                presentToday: summData.hadir || hadirCount,
-                lateToday: summData.telat || telatCount,
-                onLeaveToday: summData.izin || izinCount,
-                absentToday: summData.alpha || alphaCount
+                presentToday: hadirCount,
+                lateToday: telatCount,
+                onLeaveToday: izinCount,
+                absentToday: alphaCount,
+                belumAbsen: belumAbsenCount
             });
 
         } catch (error) {
@@ -70,6 +72,7 @@ const AdminDashboard = () => {
             case 'TELAT': return '#f59e0b';
             case 'ALPHA': return '#ef4444';
             case 'IZIN': return '#3b82f6';
+            case 'BELUM_ABSEN': return '#9ca3af';
             default: return '#6b7280';
         }
     };
@@ -78,8 +81,9 @@ const AdminDashboard = () => {
         switch(status) {
             case 'HADIR': return 'Hadir';
             case 'TELAT': return 'Terlambat';
-            case 'ALPHA': return 'Absen';
+            case 'ALPHA': return 'Alpha';
             case 'IZIN': return 'Izin';
+            case 'BELUM_ABSEN': return 'Belum Absen';
             default: return 'Belum Absen';
         }
     };
@@ -161,6 +165,17 @@ const AdminDashboard = () => {
                     <div className="stat-value">{stats.absentToday}</div>
                     <div className="stat-footer">Alpha</div>
                 </div>
+
+                {stats.belumAbsen > 0 && (
+                    <div className="stat-card">
+                        <div className="stat-header">
+                            <span className="stat-label">Belum Absen</span>
+                            <Clock size={20} style={{ color: '#9ca3af' }} />
+                        </div>
+                        <div className="stat-value">{stats.belumAbsen}</div>
+                        <div className="stat-footer">Belum check-in</div>
+                    </div>
+                )}
             </div>
 
             <div className="dashboard-grid">
@@ -193,6 +208,22 @@ const AdminDashboard = () => {
                                     {stats.absentToday}
                                 </span>
                             </div>
+                            {stats.belumAbsen > 0 && (
+                                <div className="summary-item">
+                                    <span className="label">Belum Absen</span>
+                                    <span className="number" style={{ color: '#9ca3af' }}>
+                                        {stats.belumAbsen}
+                                    </span>
+                                </div>
+                            )}
+                            {stats.onLeaveToday > 0 && (
+                                <div className="summary-item">
+                                    <span className="label">Izin</span>
+                                    <span className="number" style={{ color: '#3b82f6' }}>
+                                        {stats.onLeaveToday}
+                                    </span>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>

@@ -213,7 +213,7 @@ const Dashboard = () => {
                     {todayStatus?.status === 'ALPHA' ? (
                         <>
                             <div className="status-message-pending" style={{ color: '#ef4444' }}>
-                                Anda tercatat <strong>ALPHA</strong> hari ini karena tidak melakukan presensi.
+                                Anda tercatat <strong>ALPHA</strong> hari ini karena tidak melakukan presensi sebelum jam 12:00.
                             </div>
                             <div className="status-badge-pending" style={{ backgroundColor: '#ef4444', color: '#fff' }}>Alpha</div>
                         </>
@@ -224,21 +224,32 @@ const Dashboard = () => {
                             </div>
                             <div className="status-badge" style={{ backgroundColor: '#3b82f6' }}>Izin</div>
                         </>
-                    ) : hasCheckedInToday() ? (
+                    ) : todayStatus?.status === 'TELAT' ? (
+                        <>
+                            <div className="status-message">
+                                Anda sudah melakukan Presensi hari ini, namun tercatat <strong>Terlambat</strong>. Catat aktivitas harian di Log Book sebelum pulang.
+                            </div>
+                            <div className="status-badge" style={{ backgroundColor: '#f59e0b' }}>Terlambat</div>
+                            <div className="status-time">
+                                <Clock size={16} />
+                                <span>Masuk: {todayStatus.jam_masuk}</span>
+                            </div>
+                        </>
+                    ) : todayStatus?.status === 'HADIR' ? (
                         <>
                             <div className="status-message">
                                 Anda sudah melakukan Presensi hari ini. Catat aktivitas harian di Log Book sebelum pulang.
                             </div>
-                            <div className="status-badge">Sedang Magang</div>
+                            <div className="status-badge">Hadir</div>
                             <div className="status-time">
                                 <Clock size={16} />
-                                <span>Masuk: {recentActivities[0]?.jam_masuk || formatTime(currentTime)}</span>
+                                <span>Masuk: {todayStatus.jam_masuk}</span>
                             </div>
                         </>
                     ) : (
                         <>
                             <div className="status-message-pending">
-                                Anda belum melakukan Presensi hari ini. Silakan submit presensi sekarang.
+                                Anda belum melakukan Presensi hari ini. Silakan submit presensi sebelum jam 12:00.
                             </div>
                             <div className="status-badge-pending">Belum Absen</div>
                         </>
@@ -247,13 +258,25 @@ const Dashboard = () => {
 
                 {/* Check-In Button - Right */}
                 <div className="check-in-section">
-                    <button 
-                        className="check-in-btn-circle"
-                        onClick={() => setShowCamera(true)}
-                    >
-                        <span className="check-in-icon">→</span>
-                    </button>
-                    <div className="btn-label">Submit Presensi</div>
+                    {(!todayStatus || !todayStatus.status) ? (
+                        <>
+                            <button 
+                                className="check-in-btn-circle"
+                                onClick={() => setShowCamera(true)}
+                            >
+                                <span className="check-in-icon">→</span>
+                            </button>
+                            <div className="btn-label">Submit Presensi</div>
+                        </>
+                    ) : (
+                        <div className="btn-label" style={{ textAlign: 'center', color: '#6b7280' }}>
+                            {todayStatus.status === 'ALPHA' 
+                                ? 'Batas presensi sudah lewat' 
+                                : todayStatus.status === 'IZIN'
+                                ? 'Anda sedang izin'
+                                : 'Sudah presensi hari ini'}
+                        </div>
+                    )}
                 </div>
             </div>
 

@@ -186,7 +186,12 @@ const Attendance = () => {
 
                 {/* Status Today Card */}
                 {checkInStatus ? (
-                    <div className={`status-today-card ${checkInStatus?.status === 'ALPHA' ? 'alpha' : checkInStatus?.status ? 'checked-in' : 'not-checked'}`}>
+                    <div className={`status-today-card ${
+                        checkInStatus?.status === 'ALPHA' ? 'alpha' : 
+                        checkInStatus?.status === 'TELAT' ? 'late' :
+                        checkInStatus?.status === 'IZIN' ? 'on-leave' :
+                        checkInStatus?.status ? 'checked-in' : 'not-checked'
+                    }`}>
                         <div className="status-indicator">
                             {checkInStatus?.status ? (
                                 <div className="status-badge-large success">
@@ -199,7 +204,17 @@ const Attendance = () => {
                         <div className="status-content">
                             <div className="status-time">
                                 {checkInStatus?.status === 'ALPHA' ? (
-                                    <p className="status-message" style={{ color: '#ef4444' }}>Anda tercatat <strong>ALPHA</strong> hari ini karena tidak melakukan check-in.</p>
+                                    <p className="status-message" style={{ color: '#ef4444' }}>Anda tercatat <strong>ALPHA</strong> hari ini karena tidak melakukan check-in sebelum jam 12:00.</p>
+                                ) : checkInStatus?.status === 'IZIN' ? (
+                                    <p className="status-message" style={{ color: '#3b82f6' }}>Anda sedang <strong>IZIN</strong> hari ini.</p>
+                                ) : checkInStatus?.status === 'TELAT' ? (
+                                    <>
+                                        <p className="status-message" style={{ color: '#f59e0b' }}>Anda tercatat <strong>Terlambat</strong> hari ini.</p>
+                                        <div className="time-item">
+                                            <span className="time-label1">Jam Masuk</span>
+                                            <span className="time-value">{checkInStatus.jam_masuk}</span>
+                                        </div>
+                                    </>
                                 ) : checkInStatus?.jam_masuk ? (
                                     <>
                                         <div className="time-item">
@@ -213,8 +228,6 @@ const Attendance = () => {
                                             </div>
                                         )}
                                     </>
-                                ) : checkInStatus?.status === 'IZIN' ? (
-                                    <p className="status-message" style={{ color: '#3b82f6' }}>Anda sedang <strong>IZIN</strong> hari ini.</p>
                                 ) : (
                                     <p className="status-message">Anda belum melakukan check-in hari ini</p>
                                 )}
