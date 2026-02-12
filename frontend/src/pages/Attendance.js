@@ -391,7 +391,6 @@ const Attendance = () => {
                                 <tr>
                                     <th>Tanggal</th>
                                     <th>Jam Masuk</th>
-                                    <th>Jam Keluar</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
