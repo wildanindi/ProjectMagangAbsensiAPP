@@ -140,7 +140,7 @@ const LeaveApprovals = () => {
                                     </div>
                                     <div>
                                         <div className="employee-name">{request.nama}</div>
-                                        <div className="employee-dept">{request.role} • {request.status}</div>
+                                        <strong className="employee-dept">{request.role}  {request.status}</strong>
                                     </div>
                                 </div>
                                 {getStatusBadge(request.status)}
