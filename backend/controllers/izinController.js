@@ -226,6 +226,7 @@ const approveLeaveRequest = async (req, res) => {
 const rejectLeaveRequest = async (req, res) => {
     try {
         const { id } = req.params;
+        const { keterangan } = req.body;
 
         // Get leave request
         const leaveRequest = await izinModel.getLeaveRequestById(id);
@@ -245,8 +246,8 @@ const rejectLeaveRequest = async (req, res) => {
             });
         }
 
-        // Update status to REJECTED
-        await izinModel.updateLeaveRequestStatus(id, 'REJECTED');
+        // Update status to REJECTED with keterangan
+        await izinModel.updateLeaveRequestStatus(id, 'REJECTED', keterangan || null);
 
         return res.status(200).json({
             success: true,

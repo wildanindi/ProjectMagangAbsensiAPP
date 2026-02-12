@@ -2323,6 +2323,21 @@ table tbody tr:hover {
     font-size: 14px;
 }
 
+.rejection-reason {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 6px;
+    color: #dc2626;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.rejection-reason svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
 @media (max-width: 768px) {
     .leave-table {
         font-size: 12px;

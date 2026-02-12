@@ -86,11 +86,20 @@ const getAllLeaveRequests = async (status = null) => {
 };
 
 // Update leave request status
-const updateLeaveRequestStatus = async (id, status, userData) => {
+const updateLeaveRequestStatus = async (id, status, keterangan = null) => {
     try {
-        const query = `UPDATE izin SET status = ? WHERE id = ?`;
-        
-        await db.query(query, [status, id]);
+        let query;
+        let params;
+
+        if (keterangan !== null && keterangan !== undefined) {
+            query = `UPDATE izin SET status = ?, keterangan = ? WHERE id = ?`;
+            params = [status, keterangan, id];
+        } else {
+            query = `UPDATE izin SET status = ? WHERE id = ?`;
+            params = [status, id];
+        }
+
+        await db.query(query, params);
         
         // If approved, calculate days and update user's sisa_izin
         if (status === 'APPROVED') {

@@ -88,11 +88,15 @@ CREATE TABLE izin (
   tanggal_selesai DATE NOT NULL,
   alasan TEXT,
   status ENUM('PENDING','APPROVED','REJECTED') DEFAULT 'PENDING',
+  keterangan TEXT DEFAULT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   FOREIGN KEY (user_id) REFERENCES users(id)
     ON DELETE CASCADE
 );
+
+-- ALTER untuk tabel yang sudah ada:
+-- ALTER TABLE izin ADD COLUMN keterangan TEXT DEFAULT NULL AFTER status;
 
 /* ================================
    VIEW DASHBOARD ADMIN

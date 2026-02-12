@@ -222,7 +222,8 @@ const LeaveRequest = () => {
                                     <th>Tanggal Selesai</th>
                                     <th>Durasi</th>
                                     <th>Status</th>
-                                    <th>Keterangan</th>
+                                    <th>Alasan</th>
+                                    <th>Keterangan Admin</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -234,6 +235,14 @@ const LeaveRequest = () => {
                                         <td className="duration-cell">{calculateDays(request.tanggal_mulai, request.tanggal_selesai)} Hari</td>
                                         <td>{getStatusBadge(request.status)}</td>
                                         <td className="note-cell">{request.alasan || '-'}</td>
+                                        <td className="note-cell">
+                                            {request.status === 'REJECTED' && request.keterangan ? (
+                                                <span className="rejection-reason">
+                                                    <XCircle size={14} />
+                                                    {request.keterangan}
+                                                </span>
+                                            ) : '-'}
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
