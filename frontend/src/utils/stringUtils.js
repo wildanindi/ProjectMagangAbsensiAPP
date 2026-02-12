@@ -50,3 +50,13 @@ export const getStatusColor = (status) => {
     };
     return colorMap[status] || '#9ca3af';
 };
+
+/**
+ * Format numeric user ID ke template MAG-ICON-{ID}
+ * Contoh: 1 → MAG-ICON-001, 25 → MAG-ICON-025
+ */
+export const formatUserId = (id) => {
+    if (!id && id !== 0) return '-';
+    const paddedId = String(id).padStart(3, '0');
+    return `MAG-ICON-${paddedId}`;
+};

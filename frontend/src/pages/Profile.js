@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { usersAPI } from '../api/users';
 import Swal from 'sweetalert2';
 import { Edit2, Key, Mail, University, X, PhoneCall, User, IdCard  } from 'lucide-react';
+import { formatUserId } from '../utils/stringUtils';
 import './Profile.css';
 
 const Profile = () => {
@@ -204,8 +205,8 @@ const Profile = () => {
                                 <div className="detail-row">
                                     <span className="detail-icon"><IdCard  /></span>
                                     <div className="detail-content">
-                                        <span className="detail-label">ID Karyawan</span>
-                                        <span className="detail-value">{user?.id}</span>
+                                        <span className="detail-label">ID Anak Magang</span>
+                                        <span className="detail-value">{formatUserId(user?.id)}</span>
                                     </div>
                                 </div>
                                 
