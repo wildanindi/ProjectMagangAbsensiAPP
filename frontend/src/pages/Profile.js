@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { usersAPI } from '../api/users';
 import Swal from 'sweetalert2';
-import { Edit2, Key, Mail, University, X, PhoneCall, User, Hash } from 'lucide-react';
+import { Edit2, Key, Mail, University, X, PhoneCall, User, IdCard  } from 'lucide-react';
 import './Profile.css';
 
 const Profile = () => {
@@ -202,7 +202,7 @@ const Profile = () => {
                         <div className="detail-section">
                             <h2>INFORMASI PESERTA</h2>
                                 <div className="detail-row">
-                                    <span className="detail-icon"><Hash /></span>
+                                    <span className="detail-icon"><IdCard  /></span>
                                     <div className="detail-content">
                                         <span className="detail-label">ID Karyawan</span>
                                         <span className="detail-value">{user?.id}</span>
