@@ -93,18 +93,6 @@ const Login = () => {
                         </div>
                     </div>
 
-                    <div className="form-row">
-                        <div className="checkbox-group">
-                            <input
-                                type="checkbox"
-                                id="rememberMe"
-                                checked={rememberMe}
-                                onChange={(e) => setRememberMe(e.target.checked)}
-                            />
-                            <label htmlFor="rememberMe">Ingat saya</label>
-                        </div>
-                        <a href="#" className="forgot-password">Lupa Password?</a>
-                    </div>
 
                     <button 
                         type="submit" 
