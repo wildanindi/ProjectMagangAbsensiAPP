@@ -40,13 +40,19 @@ const AdminDashboard = () => {
 
             setUsersData(users);
             
-            // Count on leave (inferred from izin API later, for now use 0)
+            // Hitung stats dari users list supaya akurat
+            // (summary query mungkin belum menghitung user tanpa record)
+            const hadirCount = users.filter(u => u.status_hari_ini === 'HADIR').length;
+            const telatCount = users.filter(u => u.status_hari_ini === 'TELAT').length;
+            const alphaCount = users.filter(u => u.status_hari_ini === 'ALPHA').length;
+            const izinCount = users.filter(u => u.status_hari_ini === 'IZIN').length;
+
             setStats({
                 totalInterns: interns.length,
-                presentToday: summData.hadir || 0,
-                lateToday: summData.telat || 0,
-                onLeaveToday: 0, // Will be updated from izin API
-                absentToday: summData.alpha || 0
+                presentToday: summData.hadir || hadirCount,
+                lateToday: summData.telat || telatCount,
+                onLeaveToday: summData.izin || izinCount,
+                absentToday: summData.alpha || alphaCount
             });
 
         } catch (error) {
@@ -63,6 +69,7 @@ const AdminDashboard = () => {
             case 'HADIR': return '#10b981';
             case 'TELAT': return '#f59e0b';
             case 'ALPHA': return '#ef4444';
+            case 'IZIN': return '#3b82f6';
             default: return '#6b7280';
         }
     };
@@ -72,6 +79,7 @@ const AdminDashboard = () => {
             case 'HADIR': return 'Hadir';
             case 'TELAT': return 'Terlambat';
             case 'ALPHA': return 'Absen';
+            case 'IZIN': return 'Izin';
             default: return 'Belum Absen';
         }
     };

@@ -22,6 +22,7 @@ const Dashboard = () => {
     const [showCamera, setShowCamera] = useState(false);
     const [capturedImage, setCapturedImage] = useState(null);
     const [submitting, setSubmitting] = useState(false);
+    const [todayStatus, setTodayStatus] = useState(null);
     const webcamRef = React.useRef(null);
 
     useEffect(() => {
@@ -102,6 +103,14 @@ const Dashboard = () => {
                     // Fetch recent activities
                     const historyResponse = await absensiAPI.getUserAttendanceHistory(5, 0);
                     setRecentActivities(historyResponse.data || []);
+
+                    // Fetch today's attendance status (termasuk ALPHA setelah jam cutoff)
+                    try {
+                        const todayResponse = await absensiAPI.getTodayAttendance();
+                        setTodayStatus(todayResponse.data || null);
+                    } catch (error) {
+                        console.error('Error fetching today status:', error);
+                    }
 
                     // Fetch leave summary
                     try {
@@ -201,7 +210,21 @@ const Dashboard = () => {
                 {/* Status Kehadiran - Middle */}
                 <div className="status-card middle">
                     <div className="status-header">Presensi Magang</div>
-                    {hasCheckedInToday() ? (
+                    {todayStatus?.status === 'ALPHA' ? (
+                        <>
+                            <div className="status-message-pending" style={{ color: '#ef4444' }}>
+                                Anda tercatat <strong>ALPHA</strong> hari ini karena tidak melakukan presensi.
+                            </div>
+                            <div className="status-badge-pending" style={{ backgroundColor: '#ef4444', color: '#fff' }}>Alpha</div>
+                        </>
+                    ) : todayStatus?.status === 'IZIN' ? (
+                        <>
+                            <div className="status-message">
+                                Anda sedang izin hari ini.
+                            </div>
+                            <div className="status-badge" style={{ backgroundColor: '#3b82f6' }}>Izin</div>
+                        </>
+                    ) : hasCheckedInToday() ? (
                         <>
                             <div className="status-message">
                                 Anda sudah melakukan Presensi hari ini. Catat aktivitas harian di Log Book sebelum pulang.

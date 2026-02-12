@@ -1,5 +1,6 @@
 const absensiModel = require('../models/absensiModel');
 const userModel = require('../models/userModel');
+const izinModel = require('../models/izinModel');
 const { processAlpha } = require('../scheduler/alphaScheduler');
 const dayjs = require('dayjs');
 const path = require('path');
@@ -77,6 +78,47 @@ const getAttendanceToday = async (req, res) => {
         const attendance = await absensiModel.getUserAttendanceToday(userId);
 
         if (!attendance) {
+            // Cek apakah sudah lewat jam cutoff (12:00 WIB)
+            const now = dayjs();
+            const cutoffHour = 12;
+
+            if (now.hour() >= cutoffHour) {
+                // Cek apakah user punya izin yang disetujui hari ini
+                const userLeaves = await izinModel.getUserLeaveRequests(userId, 'APPROVED');
+                const today = now.format('YYYY-MM-DD');
+                const hasApprovedLeave = userLeaves.some(leave => {
+                    return today >= leave.tanggal_mulai.toISOString().split('T')[0] &&
+                           today <= leave.tanggal_selesai.toISOString().split('T')[0];
+                });
+
+                if (hasApprovedLeave) {
+                    return res.status(200).json({
+                        success: true,
+                        message: 'Anda sedang izin hari ini',
+                        data: {
+                            user_id: userId,
+                            tanggal: today,
+                            jam_masuk: null,
+                            status: 'IZIN',
+                            foto_path: null
+                        }
+                    });
+                }
+
+                // Tidak ada izin dan belum absen = ALPHA
+                return res.status(200).json({
+                    success: true,
+                    message: 'Anda ditandai ALPHA hari ini',
+                    data: {
+                        user_id: userId,
+                        tanggal: today,
+                        jam_masuk: null,
+                        status: 'ALPHA',
+                        foto_path: null
+                    }
+                });
+            }
+
             return res.status(200).json({
                 success: true,
                 message: 'Anda belum absen hari ini',

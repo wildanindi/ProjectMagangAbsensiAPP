@@ -101,13 +101,25 @@ const getAllAttendance = async (limit = 100, offset = 0) => {
 const getAttendanceSummaryToday = async () => {
     try {
         const query = `SELECT 
-                        COUNT(CASE WHEN status = 'HADIR' THEN 1 END) as hadir,
-                        COUNT(CASE WHEN status = 'TELAT' THEN 1 END) as telat,
-                        COUNT(CASE WHEN status = 'ALPHA' THEN 1 END) as alpha,
-                        COUNT(*) as total_record,
+                        COALESCE(SUM(CASE WHEN a.status = 'HADIR' THEN 1 ELSE 0 END), 0) as hadir,
+                        COALESCE(SUM(CASE WHEN a.status = 'TELAT' THEN 1 ELSE 0 END), 0) as telat,
+                        (
+                            COALESCE(SUM(CASE WHEN a.status = 'ALPHA' THEN 1 ELSE 0 END), 0)
+                            +
+                            (SELECT COUNT(*) FROM users u 
+                             WHERE u.role = 'USER' 
+                             AND u.id NOT IN (SELECT ab.user_id FROM absensi ab WHERE ab.tanggal = CURDATE())
+                             AND u.id NOT IN (
+                                SELECT iz.user_id FROM izin iz 
+                                WHERE iz.status = 'APPROVED' 
+                                AND CURDATE() BETWEEN iz.tanggal_mulai AND iz.tanggal_selesai
+                             )
+                            )
+                        ) as alpha,
+                        COUNT(a.id) as total_record,
                         (SELECT COUNT(*) FROM izin WHERE status = 'APPROVED' AND CURDATE() BETWEEN tanggal_mulai AND tanggal_selesai) as izin
-                    FROM absensi 
-                    WHERE tanggal = CURDATE() AND user_id IN (
+                    FROM absensi a
+                    WHERE a.tanggal = CURDATE() AND a.user_id IN (
                         SELECT id FROM users WHERE role = 'USER'
                     )`;
         
@@ -127,9 +139,18 @@ const getUsersWithTodayAttendance = async () => {
                         u.email,
                         u.username,
                         u.sisa_izin,
-                        COALESCE(a.status, 'ALPHA') AS status_hari_ini,
-                        COALESCE(a.jam_masuk, NULL) AS jam_masuk_hari_ini,
-                        COALESCE(a.foto_path, NULL) AS foto_hari_ini
+                        CASE
+                            WHEN a.status IS NOT NULL THEN a.status
+                            WHEN EXISTS (
+                                SELECT 1 FROM izin i 
+                                WHERE i.user_id = u.id 
+                                AND i.status = 'APPROVED' 
+                                AND CURDATE() BETWEEN i.tanggal_mulai AND i.tanggal_selesai
+                            ) THEN 'IZIN'
+                            ELSE 'ALPHA'
+                        END AS status_hari_ini,
+                        a.jam_masuk AS jam_masuk_hari_ini,
+                        a.foto_path AS foto_hari_ini
                     FROM users u
                     LEFT JOIN absensi a 
                         ON u.id = a.user_id 

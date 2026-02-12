@@ -185,8 +185,8 @@ const Attendance = () => {
                 <h2>Check-in Kehadiran</h2>
 
                 {/* Status Today Card */}
-                {checkInStatus && (
-                    <div className={`status-today-card ${checkInStatus?.status ? 'checked-in' : 'not-checked'}`}>
+                {checkInStatus ? (
+                    <div className={`status-today-card ${checkInStatus?.status === 'ALPHA' ? 'alpha' : checkInStatus?.status ? 'checked-in' : 'not-checked'}`}>
                         <div className="status-indicator">
                             {checkInStatus?.status ? (
                                 <div className="status-badge-large success">
@@ -198,7 +198,9 @@ const Attendance = () => {
                         </div>
                         <div className="status-content">
                             <div className="status-time">
-                                {checkInStatus?.jam_masuk ? (
+                                {checkInStatus?.status === 'ALPHA' ? (
+                                    <p className="status-message" style={{ color: '#ef4444' }}>Anda tercatat <strong>ALPHA</strong> hari ini karena tidak melakukan check-in.</p>
+                                ) : checkInStatus?.jam_masuk ? (
                                     <>
                                         <div className="time-item">
                                             <span className="time-label1">Jam Masuk</span>
@@ -211,13 +213,15 @@ const Attendance = () => {
                                             </div>
                                         )}
                                     </>
+                                ) : checkInStatus?.status === 'IZIN' ? (
+                                    <p className="status-message" style={{ color: '#3b82f6' }}>Anda sedang <strong>IZIN</strong> hari ini.</p>
                                 ) : (
                                     <p className="status-message">Anda belum melakukan check-in hari ini</p>
                                 )}
                             </div>
                         </div>
                     </div>
-                )}
+                ) : null}
 
                 {/* Camera Section */}
                 {!photoData ? (

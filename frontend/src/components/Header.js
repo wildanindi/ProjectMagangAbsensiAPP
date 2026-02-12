@@ -33,7 +33,7 @@ const Header = () => {
                         {user?.nama?.charAt(0).toUpperCase()}
                     </div>
                     <div className="user-info">
-                        <div className="user-role">{user?.role === 'ADMIN' ? 'Administrator' : user?.role}</div>
+                        <div className="user-role">{user?.role === 'ADMIN' ? 'Administrator' : user?.nama}</div>
                     </div>
                 </div>
             </div>
