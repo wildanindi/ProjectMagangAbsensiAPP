@@ -636,7 +636,35 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    background: #f3f4f6;
+    background: #f0fdf4;
+    color: #16a34a;
+    border-color: #86efac;
+}
+
+.export-btn:hover {
+    background: #16a34a;
+    color: white;
+    border-color: #16a34a;
+}
+
+.export-btn-pdf {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid #fca5a5;
+    border-radius: 6px;
+    background: #fef2f2;
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.3s ease;
+}
+
+.export-btn-pdf:hover {
+    background: #ef4444;
+    color: white;
+    border-color: #ef4444;
 }
 
 .attendance-stats {
@@ -2336,6 +2364,33 @@ table tbody tr:hover {
 .rejection-reason svg {
     flex-shrink: 0;
     margin-top: 2px;
+}
+
+.btn-cancel-request {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-cancel-request:hover {
+    background: #dc2626;
+    color: white;
+    border-color: #dc2626;
+}
+
+.no-action {
+    color: #9ca3af;
+    font-size: 13px;
 }
 
 @media (max-width: 768px) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { usersAPI } from '../api/users';
 import { absensiAPI } from '../api/absensi';
-import { AlertCircle, Users, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
+import { AlertCircle, Users, CheckCircle, Clock, AlertTriangle, FileSpreadsheet, FileText } from 'lucide-react';
 import Swal from 'sweetalert2';
 import './AdminDashboard.css';
 
@@ -17,6 +17,8 @@ const AdminDashboard = () => {
     const [usersData, setUsersData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [exportMonth, setExportMonth] = useState(new Date().toISOString().slice(0, 7));
+    const [exporting, setExporting] = useState(false);
 
     useEffect(() => {
         fetchDashboardData();
@@ -112,10 +114,79 @@ const AdminDashboard = () => {
         return `${SERVER_BASE}${p}`;
     };
 
+    const handleAdminExport = async (format = 'excel') => {
+        try {
+            setExporting(true);
+            let response;
+
+            if (format === 'pdf') {
+                response = await absensiAPI.exportAdminPdf(exportMonth);
+            } else {
+                response = await absensiAPI.exportAdminExcel(exportMonth);
+            }
+
+            const blob = new Blob([response.data], {
+                type: format === 'pdf' ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            });
+
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `Rekap_Absensi_Semua_${exportMonth}.${format === 'pdf' ? 'pdf' : 'xlsx'}`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+
+            Swal.fire({ icon: 'success', title: 'Export Berhasil', text: `File ${format.toUpperCase()} berhasil diunduh`, timer: 2000, showConfirmButton: false });
+        } catch (error) {
+            Swal.fire('Error', 'Gagal mengekspor data', 'error');
+        } finally {
+            setExporting(false);
+        }
+    };
+
     return (
         <div className="admin-dashboard">
             <h1>Dashboard Admin</h1>
             <p className="subtitle">Kelola data anak magang dan monitoring kehadiran</p>
+
+            {/* Export Section */}
+            <div className="export-section">
+                <div className="export-controls">
+                    <label className="export-label">Export Rekap:</label>
+                    <select
+                        value={exportMonth}
+                        onChange={(e) => setExportMonth(e.target.value)}
+                        className="export-month-select"
+                    >
+                        {Array.from({ length: 12 }, (_, i) => {
+                            const date = new Date(new Date().getFullYear(), new Date().getMonth() - i, 1);
+                            const value = date.toISOString().slice(0, 7);
+                            const label = date.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+                            return <option key={value} value={value}>{label}</option>;
+                        })}
+                    </select>
+                    <button
+                        onClick={() => handleAdminExport('excel')}
+                        className="export-btn-admin"
+                        disabled={exporting}
+                        title="Export Excel"
+                    >
+                        <FileSpreadsheet size={16} />
+                        <span>Excel</span>
+                    </button>
+                    <button
+                        onClick={() => handleAdminExport('pdf')}
+                        className="export-btn-admin export-btn-admin-pdf"
+                        disabled={exporting}
+                        title="Export PDF"
+                    >
+                        <FileText size={16} />
+                        <span>PDF</span>
+                    </button>
+                </div>
+            </div>
 
             {error && (
                 <div className="error-banner">

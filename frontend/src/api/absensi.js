@@ -55,5 +55,39 @@ export const absensiAPI = {
     getUserAttendanceDetail: async (userId) => {
         const response = await apiClient.get(`/absensi/admin/user/${userId}`);
         return response.data;
+    },
+
+    // User export
+    exportUserExcel: async (month) => {
+        const response = await apiClient.get('/absensi/export/excel', {
+            params: { month },
+            responseType: 'blob'
+        });
+        return response;
+    },
+
+    exportUserPdf: async (month) => {
+        const response = await apiClient.get('/absensi/export/pdf', {
+            params: { month },
+            responseType: 'blob'
+        });
+        return response;
+    },
+
+    // Admin export
+    exportAdminExcel: async (month) => {
+        const response = await apiClient.get('/absensi/admin/export/excel', {
+            params: { month },
+            responseType: 'blob'
+        });
+        return response;
+    },
+
+    exportAdminPdf: async (month) => {
+        const response = await apiClient.get('/absensi/admin/export/pdf', {
+            params: { month },
+            responseType: 'blob'
+        });
+        return response;
     }
 };

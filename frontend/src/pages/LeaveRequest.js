@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { izinAPI } from '../api/izin';
 import Swal from 'sweetalert2';
-import { Calendar, AlertCircle, XCircle, CheckCircle, Clock } from 'lucide-react';
+import { Calendar, AlertCircle, XCircle, CheckCircle, Clock, Trash2 } from 'lucide-react';
 import './LeaveRequest.css';
 
 const LeaveRequest = () => {
@@ -74,6 +74,28 @@ const LeaveRequest = () => {
             'IZIN_KHUSUS': 'Izin Khusus'
         };
         return typeMap[type] || type;
+    };
+
+    const handleCancelRequest = async (id) => {
+        try {
+            const result = await Swal.fire({
+                title: 'Batalkan Pengajuan?',
+                text: 'Pengajuan izin yang dibatalkan tidak dapat dikembalikan.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Batalkan',
+                cancelButtonText: 'Tidak',
+                confirmButtonColor: '#ef4444'
+            });
+
+            if (result.isConfirmed) {
+                await izinAPI.deleteLeaveRequest(id);
+                Swal.fire('Dibatalkan', 'Pengajuan izin berhasil dibatalkan', 'success');
+                fetchLeaveRequests();
+            }
+        } catch (error) {
+            Swal.fire('Error', error.response?.data?.message || 'Gagal membatalkan pengajuan', 'error');
+        }
     };
 
     const handleChange = (e) => {
@@ -224,6 +246,7 @@ const LeaveRequest = () => {
                                     <th>Status</th>
                                     <th>Alasan</th>
                                     <th>Keterangan Admin</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -242,6 +265,20 @@ const LeaveRequest = () => {
                                                     {request.keterangan}
                                                 </span>
                                             ) : '-'}
+                                        </td>
+                                        <td>
+                                            {request.status === 'PENDING' ? (
+                                                <button
+                                                    className="btn-cancel-request"
+                                                    onClick={() => handleCancelRequest(request.id)}
+                                                    title="Batalkan pengajuan"
+                                                >
+                                                    <Trash2 size={15} />
+                                                    <span>Batalkan</span>
+                                                </button>
+                                            ) : (
+                                                <span className="no-action">-</span>
+                                            )}
                                         </td>
                                     </tr>
                                 ))}

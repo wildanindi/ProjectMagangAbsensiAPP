@@ -299,6 +299,39 @@ const deleteAttendance = async (id) => {
     }
 };
 
+// Get user attendance for export (by month)
+const getUserAttendanceForExport = async (userId, month) => {
+    try {
+        const query = `SELECT 
+                        a.tanggal, a.jam_masuk, a.status
+                    FROM absensi a
+                    WHERE a.user_id = ?
+                    AND DATE_FORMAT(a.tanggal, '%Y-%m') = ?
+                    ORDER BY a.tanggal ASC`;
+        const [rows] = await db.query(query, [userId, month]);
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Get all attendance for export (Admin, by month)
+const getAllAttendanceForExport = async (month) => {
+    try {
+        const query = `SELECT 
+                        a.tanggal, a.jam_masuk, a.status,
+                        u.nama, u.username, u.email
+                    FROM absensi a
+                    JOIN users u ON a.user_id = u.id
+                    WHERE DATE_FORMAT(a.tanggal, '%Y-%m') = ?
+                    ORDER BY u.nama ASC, a.tanggal ASC`;
+        const [rows] = await db.query(query, [month]);
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = {
     createAttendance,
     getAttendanceById,
@@ -313,5 +346,7 @@ module.exports = {
     deleteAttendance,
     getActiveUsersWithoutAttendance,
     createAlphaRecord,
-    bulkCreateAlphaRecords
+    bulkCreateAlphaRecords,
+    getUserAttendanceForExport,
+    getAllAttendanceForExport
 };

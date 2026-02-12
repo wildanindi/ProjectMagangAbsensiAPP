@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { absensiAPI } from '../api/absensi';
-import { Camera, Download, Clock, X, AlertCircle } from 'lucide-react';
+import { Camera, Download, Clock, X, AlertCircle, FileSpreadsheet, FileText } from 'lucide-react';
 import Swal from 'sweetalert2';
 import './Attendance.css';
 
@@ -150,8 +150,34 @@ const Attendance = () => {
         return <span className={`badge ${statusInfo.className}`}>{statusInfo.label}</span>;
     };
 
-    const handleExport = () => {
-        alert('Fitur export akan segera tersedia');
+    const handleExport = async (format = 'excel') => {
+        try {
+            const month = filterMonth || new Date().toISOString().slice(0, 7);
+            let response;
+
+            if (format === 'pdf') {
+                response = await absensiAPI.exportUserPdf(month);
+            } else {
+                response = await absensiAPI.exportUserExcel(month);
+            }
+
+            const blob = new Blob([response.data], {
+                type: format === 'pdf' ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            });
+
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `Rekap_Absensi_${month}.${format === 'pdf' ? 'pdf' : 'xlsx'}`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+
+            Swal.fire({ icon: 'success', title: 'Export Berhasil', text: `File ${format.toUpperCase()} berhasil diunduh`, timer: 2000, showConfirmButton: false });
+        } catch (error) {
+            Swal.fire('Error', 'Gagal mengekspor data', 'error');
+        }
     };
 
     // derive displayed data based on month/date filters
@@ -326,9 +352,13 @@ const Attendance = () => {
                             className="date-filter"
                             title="Filter per tanggal"
                         />
-                        <button onClick={handleExport} className="export-btn">
-                            <Download size={18} />
-                            <span>Export</span>
+                        <button onClick={() => handleExport('excel')} className="export-btn" title="Export Excel">
+                            <FileSpreadsheet size={18} />
+                            <span>Excel</span>
+                        </button>
+                        <button onClick={() => handleExport('pdf')} className="export-btn export-btn-pdf" title="Export PDF">
+                            <FileText size={18} />
+                            <span>PDF</span>
                         </button>
                     </div>
                 </div>

@@ -15,6 +15,73 @@
     margin: 0 0 32px;
 }
 
+/* Export Section */
+.export-section {
+    margin-bottom: 24px;
+}
+
+.export-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.export-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.export-month-select {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #374151;
+    background: white;
+    cursor: pointer;
+    outline: none;
+}
+
+.export-month-select:focus {
+    border-color: #02B6D1;
+    box-shadow: 0 0 0 2px rgba(2, 182, 209, 0.15);
+}
+
+.export-btn-admin {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #10b981;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.export-btn-admin:hover:not(:disabled) {
+    background: #059669;
+    transform: translateY(-1px);
+}
+
+.export-btn-admin:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.export-btn-admin-pdf {
+    background: #ef4444;
+}
+
+.export-btn-admin-pdf:hover:not(:disabled) {
+    background: #dc2626;
+}
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
