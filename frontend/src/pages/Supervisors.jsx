@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { supervisorsAPI } from '../api/supervisors';
 import { Plus, Search, Edit2, Trash2 } from 'lucide-react';
 import Swal from 'sweetalert2';
-import './Supervisors.css';
 
 const Supervisors = () => {
     const [supervisors, setSupervisors] = useState([]);

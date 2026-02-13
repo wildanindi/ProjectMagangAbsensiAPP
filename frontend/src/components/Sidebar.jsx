@@ -10,7 +10,6 @@ import {
     LogOut
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import './Sidebar.css';
 
 const Sidebar = () => {
     const location = useLocation();

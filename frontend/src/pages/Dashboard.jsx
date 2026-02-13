@@ -6,7 +6,6 @@ import { MapPin, Clock, Calendar, AlertCircle, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Webcam from 'react-webcam';
 import Swal from 'sweetalert2';
-import './Dashboard.css';
 
 const Dashboard = () => {
     const { user } = useAuth();

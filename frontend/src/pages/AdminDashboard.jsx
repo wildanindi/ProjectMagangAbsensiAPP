@@ -3,7 +3,6 @@ import { usersAPI } from '../api/users';
 import { absensiAPI } from '../api/absensi';
 import { AlertCircle, Users, CheckCircle, Clock, AlertTriangle, FileSpreadsheet, FileText } from 'lucide-react';
 import Swal from 'sweetalert2';
-import './AdminDashboard.css';
 
 const AdminDashboard = () => {
     const [stats, setStats] = useState({

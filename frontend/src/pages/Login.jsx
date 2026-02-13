@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useAuth } from '../contexts/AuthContext';
 import { Eye, EyeOff, User, Lock, ArrowRight } from 'lucide-react';
-import './Login.css';
 
 const Login = () => {
     const [username, setUsername] = useState('');

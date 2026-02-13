@@ -3,7 +3,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { izinAPI } from '../api/izin';
 import Swal from 'sweetalert2';
 import { Calendar, AlertCircle, XCircle, CheckCircle, Clock, Trash2 } from 'lucide-react';
-import './LeaveRequest.css';
 
 const LeaveRequest = () => {
     const { user } = useAuth();

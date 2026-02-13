@@ -3,7 +3,6 @@ import { usersAPI } from '../api/users';
 import { supervisorsAPI } from '../api/supervisors';
 import { Plus, Search, Edit2, Trash2 } from 'lucide-react';
 import Swal from 'sweetalert2';
-import './EmployeeData.css';
 
 const EmployeeData = () => {
     const [employees, setEmployees] = useState([]);

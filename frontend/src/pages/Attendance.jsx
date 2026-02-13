@@ -3,7 +3,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { absensiAPI } from '../api/absensi';
 import { Camera, Download, Clock, X, AlertCircle, FileSpreadsheet, FileText } from 'lucide-react';
 import Swal from 'sweetalert2';
-import './Attendance.css';
 
 const Attendance = () => {
     const { user } = useAuth();

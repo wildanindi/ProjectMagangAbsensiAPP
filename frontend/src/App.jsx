@@ -12,7 +12,6 @@ import AdminDashboard from './pages/AdminDashboard';
 import EmployeeData from './pages/EmployeeData';
 import Supervisors from './pages/Supervisors';
 import LeaveApprovals from './pages/LeaveApprovals';
-import './App.css';
 
 function App() {
   return (
