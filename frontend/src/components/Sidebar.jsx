@@ -41,7 +41,7 @@ const Sidebar = () => {
         <aside className="sidebar">
             <div className="sidebar-header">
                 <div className="sidebar-brand">
-                    <span className="brand-icon">A</span>
+                    <img src="/ICONNET LOGO.png" alt="Logo" className="brand-icon" />
                     <span className="brand-name">AbsensiKu</span>
                 </div>
             </div>
