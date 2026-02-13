@@ -46,10 +46,8 @@ const Login = () => {
             
             <div className="login-card">
                 <div className="login-header">
-                    <div className="login-logo">
-                        <span>I</span>
-                    </div>
-                    <h1>Portal Internship</h1>
+                    <img src="/ICONNET WARNA (1).png" alt="Logo" className="login-logo" />
+                    <h1>Absensi Magang</h1>
                     <p>Silakan masuk untuk akses log book & absensi</p>
                 </div>
 
