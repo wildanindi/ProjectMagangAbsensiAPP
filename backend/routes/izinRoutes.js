@@ -11,9 +11,9 @@ router.delete('/:id', verifyToken, isUser, izinController.deleteLeaveRequest);
 
 // Admin routes
 router.get('/admin/all', verifyToken, isAdmin, izinController.getAllLeaveRequests);
+router.get('/admin/pending/count', verifyToken, isAdmin, izinController.getPendingLeaveCount);
 router.get('/admin/:id', verifyToken, isAdmin, izinController.getLeaveRequestDetail);
 router.put('/admin/:id/approve', verifyToken, isAdmin, izinController.approveLeaveRequest);
 router.put('/admin/:id/reject', verifyToken, isAdmin, izinController.rejectLeaveRequest);
-router.get('/admin/pending/count', verifyToken, isAdmin, izinController.getPendingLeaveCount);
 
 module.exports = router;

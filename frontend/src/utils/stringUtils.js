@@ -24,6 +24,7 @@ export const truncate = (str, length = 50) => {
 export const getStatusLabel = (status) => {
     const statusMap = {
         'HADIR': 'Hadir',
+        'TELAT': 'Terlambat',
         'TERLAMBAT': 'Terlambat',
         'IZIN': 'Izin',
         'SAKIT': 'Sakit',
@@ -40,6 +41,7 @@ export const getStatusLabel = (status) => {
 export const getStatusColor = (status) => {
     const colorMap = {
         'HADIR': '#10b981',
+        'TELAT': '#f59e0b',
         'TERLAMBAT': '#f59e0b',
         'IZIN': '#3b82f6',
         'SAKIT': '#ef4444',

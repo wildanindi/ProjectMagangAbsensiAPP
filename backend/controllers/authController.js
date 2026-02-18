@@ -96,9 +96,7 @@ const login = async (req, res) => {
                 id: user.id,
                 username: user.username,
                 nama: user.nama,
-                role: user.role,
-                periode_id: user.periode_id,
-                sisa_izin: user.sisa_izin
+                role: user.role
             },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
@@ -238,9 +236,18 @@ const changePassword = async (req, res) => {
     }
 };
 
+// Logout (untuk JWT stateless, cukup acknowledge dari server)
+const logout = async (req, res) => {
+    return res.status(200).json({
+        success: true,
+        message: 'Logout berhasil'
+    });
+};
+
 module.exports = {
     register,
     login,
+    logout,
     getProfile,
     updateProfile,
     changePassword

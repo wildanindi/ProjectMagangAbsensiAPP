@@ -10,7 +10,7 @@ router.get('/:id', verifyToken, isAdmin, userController.getUserDetail);
 router.post('/create', verifyToken, isAdmin, userController.createIntern);
 router.put('/:id', verifyToken, userController.updateUserData);
 router.delete('/:id', verifyToken, isAdmin, userController.deleteUserData);
-router.put('/:id/change-password', verifyToken, userController.resetUserPassword);
+router.put('/:id/reset-password', verifyToken, isAdmin, userController.resetUserPassword);
 router.put('/:id/leave-balance', verifyToken, isAdmin, userController.updateUserLeaveBalance);
 
 // User routes (accessible to self)

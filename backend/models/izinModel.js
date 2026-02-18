@@ -46,14 +46,16 @@ const getLeaveRequestById = async (id) => {
 const getUserLeaveRequests = async (userId, status = null) => {
     try {
         let query = `SELECT * FROM izin WHERE user_id = ?`;
+        const params = [userId];
         
         if (status) {
-            query += ` AND status = '${status}'`;
+            query += ` AND status = ?`;
+            params.push(status);
         }
         
         query += ` ORDER BY created_at DESC`;
         
-        const [rows] = await db.query(query, [userId]);
+        const [rows] = await db.query(query, params);
         return rows;
     } catch (error) {
         throw error;
@@ -71,14 +73,16 @@ const getAllLeaveRequests = async (status = null) => {
                     FROM izin i
                     JOIN users u ON i.user_id = u.id
                     WHERE 1=1`;
+        const params = [];
         
         if (status) {
-            query += ` AND i.status = '${status}'`;
+            query += ` AND i.status = ?`;
+            params.push(status);
         }
         
         query += ` ORDER BY i.created_at DESC`;
         
-        const [rows] = await db.query(query);
+        const [rows] = await db.query(query, params);
         return rows;
     } catch (error) {
         throw error;

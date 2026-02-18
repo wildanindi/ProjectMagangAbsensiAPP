@@ -22,14 +22,16 @@ const getAllUsers = async (role = null) => {
                     LEFT JOIN periode_magang p ON u.periode_id = p.id
                     LEFT JOIN pembimbing pb ON u.pembimbing_id = pb.id
                     WHERE 1=1`;
+        const params = [];
         
         if (role) {
-            query += ` AND u.role = '${role}'`;
+            query += ` AND u.role = ?`;
+            params.push(role);
         }
         
         query += ` ORDER BY u.created_at DESC`;
         
-        const [rows] = await db.query(query);
+        const [rows] = await db.query(query, params);
         return rows;
     } catch (error) {
         throw error;
@@ -188,18 +190,6 @@ const verifyPassword = async (plainPassword, hashedPassword) => {
     }
 };
 
-// Get user's attendance today
-const getUserAttendanceToday = async (userId) => {
-    try {
-        const query = `SELECT * FROM absensi WHERE user_id = ? AND tanggal = CURDATE()`;
-        
-        const [rows] = await db.query(query, [userId]);
-        return rows[0];
-    } catch (error) {
-        throw error;
-    }
-};
-
 module.exports = {
     getAllUsers,
     getUserById,
@@ -209,6 +199,5 @@ module.exports = {
     updateUserPassword,
     updateUserSisaIzin,
     deleteUser,
-    verifyPassword,
-    getUserAttendanceToday
+    verifyPassword
 };

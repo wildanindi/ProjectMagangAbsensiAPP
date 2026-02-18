@@ -294,9 +294,7 @@ const Dashboard = () => {
                         </button>
                     </div>
                 </div>
-            </div>
-
-
+            </div> */}
 
             {/* Summary Stats */}
             {attendanceSummary && (

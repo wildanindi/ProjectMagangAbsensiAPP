@@ -1,23 +1,6 @@
-export const handleApiError = (error) => {
-    if (error.response) {
-        // Server responded with error status
-        return error.response.data?.message || error.response.statusText;
-    } else if (error.request) {
-        // Request made but no response
-        return 'Tidak ada respons dari server. Periksa koneksi internet Anda.';
-    } else {
-        // Error in request setup
-        return error.message || 'Terjadi kesalahan yang tidak diketahui';
-    }
-};
-
 export const getErrorMessage = (error) => {
     if (typeof error === 'string') {
         return error;
-    }
-    
-    if (error?.message) {
-        return error.message;
     }
     
     if (error?.response?.data?.message) {
@@ -28,8 +11,19 @@ export const getErrorMessage = (error) => {
         return error.response.statusText;
     }
     
+    if (error?.request && !error?.response) {
+        return 'Tidak ada respons dari server. Periksa koneksi internet Anda.';
+    }
+    
+    if (error?.message) {
+        return error.message;
+    }
+    
     return 'Terjadi kesalahan yang tidak diketahui';
 };
+
+/** @deprecated Gunakan getErrorMessage() — fungsi ini tetap tersedia untuk backward-compatibility */
+export const handleApiError = (error) => getErrorMessage(error);
 
 export const isNetworkError = (error) => {
     return !error.response && error.request;
