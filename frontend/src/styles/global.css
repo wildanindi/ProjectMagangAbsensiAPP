@@ -1918,15 +1918,16 @@ table tbody tr:hover {
 }
 
 .approval-card {
-    background: white;
+    background: linear-gradient(135deg, #02B6D1 0%, #1A599E 100%);
     border-radius: 12px;
-    border: 1px solid #e0e0e0;
+    border: none;
     padding: 20px;
     transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(26, 89, 158, 0.2);
 }
 
 .approval-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 16px rgba(26, 89, 158, 0.3);
 }
 
 .approval-header {
@@ -1934,6 +1935,8 @@ table tbody tr:hover {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 12px;
 }
 
 .employee-info {
@@ -1957,34 +1960,37 @@ table tbody tr:hover {
 
 .employee-name {
     font-weight: 600;
-    color: #333;
+    color: white;
     font-size: 14px;
 }
 
 .employee-dept {
     font-size: 12px;
-    color: #999;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .approval-dates {
     font-size: 13px;
-    color: #666;
+    color: rgba(255, 255, 255, 0.8);
     margin-bottom: 12px;
     padding: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .approval-reason {
-    background: #f9f9f9;
+    background: rgba(255, 255, 255, 0.15);
     padding: 12px;
     border-radius: 8px;
     font-size: 13px;
-    color: #666;
+    color: rgba(255, 255, 255, 0.9);
     margin-bottom: 16px;
-    border-left: 3px solid #02B6D1;
+    border-left: 3px solid rgba(255, 255, 255, 0.4);
 }
 
 .approval-reason strong {
-    color: #333;
+    color: white;
 }
 
 .approval-actions {
@@ -1992,7 +1998,7 @@ table tbody tr:hover {
     gap: 12px;
     justify-content: flex-end;
     padding-top: 12px;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-approve-action,
