@@ -1891,6 +1891,188 @@
     transform: translateY(-1px);
 }
 
+/* Supervisors Container Modal Overrides */
+.supervisors-container .modal-content {
+    background: white;
+    border-radius: 12px;
+    padding: 0;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(2, 182, 209, 0.25);
+}
+
+/* Custom scrollbar styling for supervisors modal */
+.supervisors-container .modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.supervisors-container .modal-content::-webkit-scrollbar-track {
+    background: #f0f7ff;
+    border-radius: 10px;
+}
+
+.supervisors-container .modal-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #02B6D1 0%, #1A599E 100%);
+    border-radius: 10px;
+}
+
+.supervisors-container .modal-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #0195b0 0%, #0d2a5a 100%);
+}
+
+/* Firefox scrollbar styling */
+.supervisors-container .modal-content {
+    scrollbar-color: #02B6D1 #f0f7ff;
+    scrollbar-width: thin;
+}
+
+.supervisors-container .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 32px;
+    background: linear-gradient(90deg, #02B6D1 0%, #1A599E 100%);
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.supervisors-container .modal-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+}
+
+.supervisors-container .btn-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: white;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.supervisors-container .btn-close:hover {
+    color: #f0f7ff;
+    transform: rotate(90deg);
+}
+
+.supervisors-container .modal-form {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.supervisors-container .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.supervisors-container .form-group label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1A599E;
+}
+
+.supervisors-container .form-group input,
+.supervisors-container .form-group select {
+    padding: 10px 12px;
+    border: 2px solid #e8eef5;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #1A599E;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.supervisors-container .form-group input:focus,
+.supervisors-container .form-group select:focus {
+    outline: none;
+    border-color: #02B6D1;
+    box-shadow: 0 0 0 3px rgba(2, 182, 209, 0.2);
+}
+
+.supervisors-container .form-group input:disabled {
+    background: #f0f7ff;
+    color: #7db3d4;
+}
+
+.supervisors-container .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.supervisors-container .form-section-title {
+    font-weight: 700;
+    color: #1A599E;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.supervisors-container .form-note {
+    font-size: 12px;
+    color: #7db3d4;
+    margin: 0;
+}
+
+.supervisors-container .modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+    padding: 32px 32px 0;
+    border-top: 1px solid #e8eef5;
+}
+
+.supervisors-container .btn-cancel {
+    padding: 10px 20px;
+    background: white;
+    color: #02B6D1;
+    border: 2px solid #02B6D1;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.supervisors-container .btn-cancel:hover {
+    background: #f0f7ff;
+    border-color: #1A599E;
+    color: #1A599E;
+}
+
+.supervisors-container .btn-submit {
+    padding: 10px 20px;
+    background: linear-gradient(90deg, #02B6D1 0%, #1A599E 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(2, 182, 209, 0.2);
+}
+
+.supervisors-container .btn-submit:hover {
+    background: linear-gradient(90deg, #0195b0 0%, #0d2a5a 100%);
+    box-shadow: 0 4px 12px rgba(2, 182, 209, 0.35);
+    transform: translateY(-1px);
+}
+
 .text-center {
     text-align: center;
     color: #999;
