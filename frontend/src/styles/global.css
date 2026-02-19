@@ -1588,39 +1588,39 @@
 .employee-table {
     background: white;
     border-radius: 12px;
-    border: 1px solid #e0e0e0;
+    border: none;
     overflow-x: auto;
+    box-shadow: 0 4px 12px rgba(26, 89, 158, 0.15);
 }
 
-table {
+.employee-table table {
     width: 100%;
     border-collapse: collapse;
 }
 
-table thead {
-    background: #f9f9f9;
-    border-bottom: 1px solid #e0e0e0;
+.employee-table thead {
+    background: linear-gradient(135deg, #02B6D1 0%, #1A599E 100%);
 }
 
-table th {
+.employee-table th {
     padding: 16px;
     text-align: left;
     font-weight: 600;
-    color: #666;
+    color: white;
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
-table td {
+.employee-table td {
     padding: 16px;
     border-bottom: 1px solid #f0f0f0;
     font-size: 14px;
     color: #333;
 }
 
-table tbody tr:hover {
-    background: #f9f9f9;
+.employee-table tbody tr:hover {
+    background: linear-gradient(135deg, rgba(2, 182, 209, 0.08) 0%, rgba(26, 89, 158, 0.08) 100%);
 }
 
 .employee-name {
@@ -1634,7 +1634,7 @@ table tbody tr:hover {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #5b21b6, #02B6D1);
+    background: linear-gradient(135deg, #02B6D1, #1A599E);
     color: white;
     display: flex;
     align-items: center;
