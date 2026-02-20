@@ -210,13 +210,12 @@ const Attendance = () => {
                 <h2>Check-in Kehadiran</h2>
 
                 {/* Status Today Card */}
-                {checkInStatus ? (
-                    <div className={`status-today-card ${
-                        checkInStatus?.status === 'ALPHA' ? 'alpha' : 
-                        checkInStatus?.status === 'TELAT' ? 'late' :
-                        checkInStatus?.status === 'IZIN' ? 'on-leave' :
-                        checkInStatus?.status ? 'checked-in' : 'not-checked'
-                    }`}>
+                <div className={`status-today-card ${
+                    checkInStatus?.status === 'ALPHA' ? 'alpha' : 
+                    checkInStatus?.status === 'TELAT' ? 'late' :
+                    checkInStatus?.status === 'IZIN' ? 'on-leave' :
+                    checkInStatus?.status ? 'checked-in' : 'not-checked'
+                }`}>
                         <div className="status-indicator">
                             {checkInStatus?.status ? (
                                 <div className="status-badge-large success">
@@ -254,15 +253,12 @@ const Attendance = () => {
                                         )}
                                     </>
                                 ) : (
-                                    <p className="status-message">Anda belum melakukan check-in hari ini</p>
+                                    <p className="status-message">Belum ada catatan Presensi hari ini</p>
                                 )}
                             </div>
                         </div>
                     </div>
-                ) : null}
 
-                {/* Camera Section */}
-                {!photoData ? (
                     <>
                         {showCamera ? (
                             <div className="camera-container">
@@ -293,38 +289,10 @@ const Attendance = () => {
                             </div>
                         ) : (
                             <div className="camera-options">
-                                    <input
-                                        ref={fileInputRef}
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={uploadPhoto}
-                                        style={{ display: 'none' }}
-                                    />
-                                </div>
+                            </div>
                         )}
                     </>
-                ) : (
-                    <div className="photo-preview-container">
-                        <img src={photoData} alt="Preview" className="photo-preview" />
-
-                        <div className="preview-actions">
-                            <button
-                                className="btn-submit"
-                                onClick={submitCheckIn}
-                                disabled={checkInLoading}
-                            >
-                                {checkInLoading ? 'Memproses...' : 'Lakukan Check-in'}
-                            </button>
-                            <button
-                                className="btn-retake"
-                                onClick={retakePhoto}
-                                disabled={checkInLoading}
-                            >
-                                Ambil Ulang
-                            </button>
-                        </div>
-                    </div>
-                )}
+                
             </div>
 
             {/* History Section */}
