@@ -2454,7 +2454,7 @@
 .leave-container h2 {
     font-size: 18px;
     font-weight: 600;
-    color: #1A599E;
+    color: #000000;
     margin: 0 0 20px;
 }
 
@@ -2507,7 +2507,7 @@
 
 .leave-container .form-group label {
     font-weight: 700;
-    color: #1A599E;
+    color: #000000;
     font-size: 14px;
 }
 
@@ -2520,7 +2520,7 @@
     font-size: 14px;
     font-family: inherit;
     background: white;
-    color: #1A599E;
+    color: #000000;
     transition: all 0.2s ease;
 }
 
@@ -2617,7 +2617,7 @@
 
 .history-header h2 {
     margin: 0;
-    color: #1A599E;
+    color: #000000;
 }
 
 .history-filters {
