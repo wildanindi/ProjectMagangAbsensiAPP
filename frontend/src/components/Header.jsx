@@ -16,7 +16,7 @@ const Header = () => {
         <header className="header">
             <div className="header-content">
                 <div className="header-left">
-                    <div className="greeting">{getGreeting()}, {user?.nama}</div>
+                    <div className="greeting" style={{ color: '#1A599E' }}>{getGreeting()}, {user?.nama}</div>
                     <div className="header-date">
                         {new Date().toLocaleDateString('id-ID', {
                             weekday: 'long',

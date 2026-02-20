@@ -339,7 +339,7 @@
     font-size: 20px;
     font-weight: 700;
     margin-bottom: 20px;
-    color: #333;
+    color: #1A599E;
 }
 
 /* Status Today Card */
@@ -595,7 +595,7 @@
 .attendance-header h2 {
     font-size: 18px;
     font-weight: 700;
-    color: #333;
+    color: #1A599E;
     margin: 0;
 }
 
@@ -821,7 +821,7 @@
 .dashboard h1 {
     font-size: 28px;
     font-weight: 700;
-    color: #333;
+    color: #1A599E;
     margin: 0 0 32px;
 }
 
