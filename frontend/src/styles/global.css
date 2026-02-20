@@ -5,7 +5,7 @@
 .admin-dashboard h1 {
     font-size: 28px;
     font-weight: 700;
-    color: #333;
+    color: #1A599E;
     margin: 0 0 8px;
 }
 
@@ -81,7 +81,7 @@
 .dashboard-card h2 {
     font-size: 16px;
     font-weight: 600;
-    color: #333;
+    color: #1A599E;
     margin: 0 0 20px;
     padding-bottom: 12px;
     border-bottom: 1px solid #e0e0e0;
@@ -1538,7 +1538,7 @@
 .employee-header h1 {
     font-size: 28px;
     font-weight: 700;
-    color: #333;
+    color: #1A599E;
     margin: 0;
 }
 
@@ -2246,7 +2246,7 @@
 .approvals-header h1 {
     font-size: 28px;
     font-weight: 700;
-    color: #333;
+    color: #1A599E;
     margin: 0 0 24px;
 }
 
@@ -3698,7 +3698,7 @@
 .supervisors-header h1 {
     font-size: 28px;
     font-weight: 700;
-    color: #333;
+    color: #1A599E;
     margin: 0;
 }
 
