@@ -2209,16 +2209,18 @@
 .btn-cancel {
     padding: 10px 20px;
     background: white;
-    color: #666;
-    border: 1px solid #d0d0d0;
+    color: #02B6D1;
+    border: 2px solid #02B6D1;
     border-radius: 6px;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 700;
     transition: all 0.3s ease;
 }
 
 .btn-cancel:hover {
-    background: #f5f5f5;
+    background: #f0f7ff;
+    border-color: #1A599E;
+    color: #1A599E;
 }
 
 .btn-submit {
@@ -3261,18 +3263,19 @@
     gap: 8px;
     padding: 12px 24px;
     background: white;
-    color: #333;
-    border: 2px solid #d0d0d0;
+    color: #02B6D1;
+    border: 2px solid #02B6D1;
     border-radius: 8px;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 700;
     transition: all 0.3s ease;
     height: fit-content;
 }
 
 .edit-btn:hover {
-    border-color: #02B6D1;
-    color: #02B6D1;
+    background: #f0f7ff;
+    border-color: #1A599E;
+    color: #1A599E;
 }
 
 .profile-header-buttons {
@@ -3306,17 +3309,18 @@
     gap: 8px;
     padding: 12px 24px;
     background: white;
-    color: #333;
-    border: 2px solid #d0d0d0;
+    color: #02B6D1;
+    border: 2px solid #02B6D1;
     border-radius: 8px;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 700;
     transition: all 0.3s ease;
 }
 
 .change-password-btn:hover {
-    border-color: #02B6D1;
-    color: #02B6D1;
+    background: #f0f7ff;
+    border-color: #1A599E;
+    color: #1A599E;
 }
 
 .profile-content {
@@ -3376,16 +3380,18 @@
 .btn-cancel {
     padding: 12px 24px;
     background: white;
-    color: #666;
-    border: 1px solid #d0d0d0;
+    color: #02B6D1;
+    border: 2px solid #02B6D1;
     border-radius: 8px;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 700;
     transition: all 0.3s ease;
 }
 
 .btn-cancel:hover {
-    background: #f5f5f5;
+    background: #f0f7ff;
+    border-color: #1A599E;
+    color: #1A599E;
 }
 
 .btn-submit {
@@ -3596,17 +3602,18 @@
 .btn-modal-cancel {
     padding: 12px 24px;
     background: white;
-    color: #666;
-    border: 1px solid #d0d0d0;
+    color: #02B6D1;
+    border: 2px solid #02B6D1;
     border-radius: 8px;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 700;
     transition: all 0.3s ease;
 }
 
 .btn-modal-cancel:hover:not(:disabled) {
-    background: #f5f5f5;
-    border-color: #999;
+    background: #f0f7ff;
+    border-color: #1A599E;
+    color: #1A599E;
 }
 
 .btn-modal-cancel:disabled {
@@ -3952,16 +3959,18 @@
 .btn-cancel {
     padding: 10px 20px;
     background: white;
-    color: #666;
-    border: 1px solid #d0d0d0;
+    color: #02B6D1;
+    border: 2px solid #02B6D1;
     border-radius: 6px;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 700;
     transition: all 0.3s ease;
 }
 
 .btn-cancel:hover {
-    background: #f5f5f5;
+    background: #f0f7ff;
+    border-color: #1A599E;
+    color: #1A599E;
 }
 
 .btn-submit {
