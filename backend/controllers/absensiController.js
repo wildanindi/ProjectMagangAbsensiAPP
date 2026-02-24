@@ -147,6 +147,9 @@ const getAttendanceHistory = async (req, res) => {
         const userId = req.user.id;
         const { limit = 50, offset = 0 } = req.query;
 
+        // Backfill missing ALPHA records for past days before fetching history
+        await absensiModel.backfillAlphaRecords(userId);
+
         const attendanceHistory = await absensiModel.getUserAttendanceHistory(
             userId,
             parseInt(limit),
@@ -203,6 +206,9 @@ const getAttendanceByDateRange = async (req, res) => {
 const getAttendanceStats = async (req, res) => {
     try {
         const userId = req.user.id;
+
+        // Backfill missing ALPHA records for past days before computing stats
+        await absensiModel.backfillAlphaRecords(userId);
 
         const stats = await absensiModel.getUserAttendanceStats(userId);
 

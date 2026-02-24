@@ -332,6 +332,75 @@ const getAllAttendanceForExport = async (month) => {
     }
 };
 
+// Backfill missing ALPHA records for past days where user had no attendance and no approved leave
+const backfillAlphaRecords = async (userId) => {
+    try {
+        // Get user's internship period
+        const [userRows] = await db.query(
+            `SELECT u.id, u.created_at, p.tanggal_mulai, p.tanggal_selesai
+             FROM users u
+             LEFT JOIN periode_magang p ON u.periode_id = p.id
+             WHERE u.id = ? AND u.role = 'USER'`,
+            [userId]
+        );
+
+        if (!userRows[0]) return 0;
+
+        const user = userRows[0];
+        // Use internship period start, fallback to account creation date
+        const startDate = user.tanggal_mulai || user.created_at;
+        if (!startDate) return 0;
+
+        const startStr = new Date(startDate).toISOString().split('T')[0];
+
+        // End date: min(yesterday, tanggal_selesai)
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+        const endStr = user.tanggal_selesai
+            ? (new Date(user.tanggal_selesai) < yesterday
+                ? new Date(user.tanggal_selesai).toISOString().split('T')[0]
+                : yesterdayStr)
+            : yesterdayStr;
+
+        if (startStr > endStr) return 0;
+
+        // Generate all weekdays in range, insert ALPHA for days without attendance or approved leave
+        const query = `
+            INSERT INTO absensi (user_id, tanggal, jam_masuk, status, foto_path)
+            WITH RECURSIVE dates AS (
+                SELECT CAST(? AS DATE) AS dt
+                UNION ALL
+                SELECT DATE_ADD(dt, INTERVAL 1 DAY) FROM dates WHERE dt < ?
+            )
+            SELECT ?, d.dt, NULL, 'ALPHA', NULL
+            FROM dates d
+            WHERE DAYOFWEEK(d.dt) NOT IN (1, 7)
+            AND NOT EXISTS (
+                SELECT 1 FROM absensi a WHERE a.user_id = ? AND a.tanggal = d.dt
+            )
+            AND NOT EXISTS (
+                SELECT 1 FROM izin i
+                WHERE i.user_id = ?
+                AND i.status = 'APPROVED'
+                AND d.dt BETWEEN i.tanggal_mulai AND i.tanggal_selesai
+            )
+            ON DUPLICATE KEY UPDATE status = status`;
+
+        const [result] = await db.query(query, [startStr, endStr, userId, userId, userId]);
+
+        if (result.affectedRows > 0) {
+            console.log(`[Backfill] Inserted ${result.affectedRows} ALPHA records for user ${userId}`);
+        }
+
+        return result.affectedRows;
+    } catch (error) {
+        console.error(`[Backfill] Error for user ${userId}:`, error.message);
+        return 0;
+    }
+};
+
 module.exports = {
     createAttendance,
     getAttendanceById,
@@ -348,5 +417,6 @@ module.exports = {
     createAlphaRecord,
     bulkCreateAlphaRecords,
     getUserAttendanceForExport,
-    getAllAttendanceForExport
+    getAllAttendanceForExport,
+    backfillAlphaRecords
 };
