@@ -170,7 +170,6 @@ const LeaveRequest = () => {
                             disabled={loading}
                         >
                             <option value="SAKIT">Sakit</option>
-                            <option value="CUTI">Cuti Tahunan</option>
                             <option value="IZIN_KHUSUS">Izin Khusus</option>
                         </select>
                     </div>
